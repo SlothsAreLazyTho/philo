@@ -1,5 +1,5 @@
 <h1 align="center">
-	<ins>Philospheres</ins>
+	<ins>Philosophers</ins>
 </h1>
 
 Here are the things you need to know if you want to succeed this assignment:
