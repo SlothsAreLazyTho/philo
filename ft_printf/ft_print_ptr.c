@@ -1,33 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   philo.c                                            :+:    :+:            */
+/*   ft_print_ptr.c                                     :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: cbijman <cbijman@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2023/05/22 18:30:18 by cbijman       #+#    #+#                 */
-/*   Updated: 2023/05/22 20:01:50 by cbijman       ########   odam.nl         */
+/*   Created: 2022/11/01 17:49:21 by cbijman       #+#    #+#                 */
+/*   Updated: 2022/11/02 17:50:51 by cbijman       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "philo.h"
+#include "ft_printf.h"
 
-enum	action
+int	ft_printptr(unsigned long int n)
 {
-	SLEEP,
-}
+	int	count;
 
-void	start_action(t_philo *philo, t_philofunc func)
-{
-	//pthread_mutex_lock();
-	//func(philo);
-	//pthread_mutex_unlock();
-	//__THROW_NOT_IMPLEMENTED();
-}
-
-int	main(int argc, char *argv[])
-{
-	t_philo	philo;
-	start_action(&philo, p_eat);
-	return (0);
+	count = 0;
+	count += ft_putstr("0x");
+	count += ft_puthex(n, 0);
+	return (count);
 }

@@ -5,41 +5,39 @@
 #                                                      +:+                     #
 #    By: cbijman <cbijman@student.codam.nl>           +#+                      #
 #                                                    +#+                       #
-#    Created: 2023/05/22 18:31:30 by cbijman       #+#    #+#                  #
-#    Updated: 2023/05/22 19:35:21 by cbijman       ########   odam.nl          #
+#    Created: 2022/10/26 13:27:47 by cbijman       #+#    #+#                  #
+#    Updated: 2022/11/02 16:11:02 by cbijman       ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
-CC = clang
-NAME = philosophers
+CC = gcc
+RM = rm -f
+AR = ar -rcs
+CFLAGS = -Wall -Wextra -Werror
+NAME = libftprintf.a
+HEADERFILES = ft_printf.h
 
-#Folders
-SRC=src
-BIN=bin
+SRCS = 	ft_printf.c \
+		ft_print_ptr.c \
+		ft_print_hex.c \
+		ft_print_utils.c \
 
-#Files
-HEADER=./include/philo.h
-FILES=$(shell find $(SRC) -type f -name "*.c")
-OBJ=${FILES:$(SRC)/%.c=$(BIN)/%.o}
+OBJS = ${SRCS:%.c=%.o}
+
+.c.o: $(SRCS) $(HEADERFILES)
+	$(CC) $(CFLAGS) -c -o $@ $<
+
+$(NAME):	$(OBJS)
+			$(AR) $(NAME) $(OBJS)
 
 all: $(NAME)
 
-$(BIN)/%.o: $(SRC)/%.c | $(BIN)
-	$(CC) -Iinclude -c $< -o $@
-
-$(NAME): $(OBJ) $(HEADER)
-	$(CC) -Iinclude $(OBJ) -pthread -Lft_printf -lftprintf -o $(NAME)
-
-$(BIN):
-	mkdir -p bin
-
 clean:
-	rm -rf $(OBJ) $(BIN)
+	$(RM) $(OBJS) $(OBJS_BONUS)
 
 fclean: clean
-	rm -rf $(NAME)
+	$(RM) $(NAME)
 
-re: fclean all
+re: clean all
 
-.PHONY: all
-	
+.PHONY: all clean fclean re
