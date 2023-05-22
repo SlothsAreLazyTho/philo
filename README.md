@@ -1,4 +1,6 @@
-# <p style="text-align: center; font-size: 72px; text-decoration: underline;">Philosophers</p>
+<h1 align="center">
+	<ins>Philospheres</ins>
+</h1>
 
 Here are the things you need to know if you want to succeed this assignment:
 - One or more philosophers sit at a round table. There is a large bowl of spaghetti in the middle of the table.
