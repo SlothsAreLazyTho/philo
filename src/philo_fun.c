@@ -6,7 +6,7 @@
 /*   By: cbijman <cbijman@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/05/22 19:26:58 by cbijman       #+#    #+#                 */
-/*   Updated: 2023/05/23 20:15:20 by cbijman       ########   odam.nl         */
+/*   Updated: 2023/05/24 15:59:07 by cbijman       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ void	adjust_timer(int aseconds, int aminutes, int ahours, int first_run)
 		return ;
 	}
 	second--;
-	printf("\033[2J\033[HRemaining: %02d:%02d:%02d\n",
+	printf("\033[2J\033[HTime remaining: %02d:%02d:%02d\n",
 		hours, minutes, second);
 }
 
@@ -72,7 +72,7 @@ void	loop_time(void)
 	static struct timeval	new_time;
 
 	gettimeofday(&val, NULL);
-	adjust_timer(0, 40, 0, 1);
+	adjust_timer(0, 0, 2, 1);
 	while (1)
 	{
 		if (val.tv_sec != new_time.tv_sec)

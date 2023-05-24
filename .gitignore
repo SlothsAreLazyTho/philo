@@ -1,4 +1,8 @@
 .vscode
 .DS_Store
 philosophers
-gitgarbage/libft
+*.o
+
+#Folders
+./gitgarbage/libft
+./bin/

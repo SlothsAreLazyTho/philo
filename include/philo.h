@@ -6,7 +6,7 @@
 /*   By: cbijman <marvin@codam.nl>                    +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/05/22 18:27:29 by cbijman       #+#    #+#                 */
-/*   Updated: 2023/05/23 20:16:05 by cbijman       ########   odam.nl         */
+/*   Updated: 2023/05/24 17:35:29 by cbijman       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,12 @@
 
 #define __THROW_NOT_IMPLEMENTED() do {	\
    	printf("Not implemented!\n");		\
-    return;								\
+    return ;							\
+} while(0)
+
+#define __THROW_NOT_IMPLEMENTED2() do {	\
+   	printf("Not implemented!\n");		\
+    return (NULL);						\
 } while(0)
 
 typedef struct s_program
@@ -37,7 +42,8 @@ typedef struct s_philosopher
 {
 	int				id;
 	t_program		*program;
-	pthread_mutex_t lock;
+	pthread_mutex_t	fork;
+	pthread_t		thread_id;
 }	t_philosopher;
 
 typedef struct s_table
@@ -53,6 +59,7 @@ typedef void	(*t_philofunc)(t_philosopher	*philo);
 void	*ft_calloc(int count, int type);
 int		ps_isnumber(char const *str);
 int		safe_atoi(const char *arg);
+int		p_rand(int low_int, int max_int);
 
 
 //Actions

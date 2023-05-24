@@ -6,7 +6,7 @@
 #    By: cbijman <cbijman@student.codam.nl>           +#+                      #
 #                                                    +#+                       #
 #    Created: 2023/05/22 18:31:30 by cbijman       #+#    #+#                  #
-#    Updated: 2023/05/23 20:12:59 by cbijman       ########   odam.nl          #
+#    Updated: 2023/05/24 15:35:00 by cbijman       ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
@@ -34,7 +34,7 @@ $(BIN):
 	mkdir -p bin
 
 run:
-	clear && ./$(NAME)	
+	./$(NAME)	
 
 clean:
 	rm -rf $(OBJ) $(BIN)
