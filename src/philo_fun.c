@@ -6,11 +6,12 @@
 /*   By: cbijman <cbijman@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/05/22 19:26:58 by cbijman       #+#    #+#                 */
-/*   Updated: 2023/05/24 15:59:07 by cbijman       ########   odam.nl         */
+/*   Updated: 2023/05/31 17:16:52 by cbijman       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
+#include <signal.h>
 
 void	print_time(struct timeval *val)
 {
@@ -59,11 +60,12 @@ void	adjust_timer(int aseconds, int aminutes, int ahours, int first_run)
 	if (hours == 0 && minutes == 0 && second == 0)
 	{
 		printf("\033[2J\033[HLogout from this computer (:\n");
+		kill(-1, SIGQUIT);
 		return ;
 	}
 	second--;
-	printf("\033[2J\033[HTime remaining: %02d:%02d:%02d\n",
-		hours, minutes, second);
+	printf("\033[2J\033[H%sTime remaining: %02d:%02d:%02d\n",
+		"\033[0;92m", hours, minutes, second);
 }
 
 void	loop_time(void)

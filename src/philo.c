@@ -6,7 +6,7 @@
 /*   By: cbijman <cbijman@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/05/22 18:30:18 by cbijman       #+#    #+#                 */
-/*   Updated: 2023/05/24 17:55:47 by cbijman       ########   odam.nl         */
+/*   Updated: 2023/05/31 18:04:28 by cbijman       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ number_of_times_each_philosopher_must_eat [Optional]: %d\n",
 		program->time_to_die,
 		program->time_to_eat,
 		program->time_to_sleep,
-		program->number_of_times_each_philosopher_must_eat);
+		program->times_to_eat);
 }
 
 void	*ft_calloc(int count, int size)
@@ -59,27 +59,18 @@ int	ps_isnumber(char const *str)
 
 void	start_action(t_philosopher *philo, t_philofunc func)
 {
-	__THROW_NOT_IMPLEMENTED();
-}
-
-t_philosopher	*recruit_philosopher(t_program *program)
-{
-	static int		size = 1;
-	t_philosopher	*person;
-
-	person = ft_calloc(1, sizeof(t_philofunc));
-	if (!person)
-		return (NULL);
-	person->id = size++;
-	person->program = program;
-	return (person);
+	func(philo);
 }
 
 void	*join_table(void *threadctx)
 {
 	const t_philosopher	*philo = (t_philosopher *) threadctx;
-	printf("%d(%p) sits at the table =>\n", philo->id, philo);
-	return (1);
+	
+	if (p_odd_or_even())
+		start_action(philo, p_think);
+	else
+		start_action(philo, p_sleep);
+	return (NULL);
 }
 
 void	prepare_table(t_program *program, int size)
@@ -93,11 +84,7 @@ void	prepare_table(t_program *program, int size)
 	{
 		tmp_p = recruit_philosopher(program);
 		tmp_t = ps_newlst(tmp_p);
-		statusid = pthread_create(&(tmp_p->thread_id), NULL, join_table, (void *)tmp_p);
-		if (statusid)
-		{
-			printf("%d could not take place in at the table\n", tmp_p->id);
-		}
+		statusid = pthread_create(&tmp_p->thread_id, NULL, join_table, (void *)tmp_p);
 		pthread_join(tmp_p->thread_id, (void *)tmp_p);
 		ps_lstadd_back(&table, tmp_t);
 	}
@@ -121,7 +108,7 @@ int	maino(int argc, const char *argv[])
 	program.time_to_die = safe_atoi(argv[2]);
 	program.time_to_eat = safe_atoi(argv[3]);
 	program.time_to_sleep = safe_atoi(argv[4]);
-	program.number_of_times_each_philosopher_must_eat = safe_atoi(argv[5]);
+	program.times_to_eat = safe_atoi(argv[5]);
 	print_program_variables(&program);
 	prepare_table(&program, program.number_of_philosophers);
 	return (0);
@@ -129,8 +116,7 @@ int	maino(int argc, const char *argv[])
 
 int	main(void)
 {
-	const char	*argv[6] = {"./philosophers", "100", "2000",
+	const char	*argv[6] = {"./philosophers", "10", "2000",
 		"1000", "2000", "5"};
-	
 	return (maino(sizeof(argv) / sizeof(char *), argv));
 }

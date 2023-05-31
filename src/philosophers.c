@@ -1,28 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   philo_actions.c                                    :+:    :+:            */
+/*   philosophers.c                                     :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: cbijman <cbijman@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2023/05/22 18:46:53 by cbijman       #+#    #+#                 */
-/*   Updated: 2023/05/31 18:04:53 by cbijman       ########   odam.nl         */
+/*   Created: 2023/05/31 18:02:05 by cbijman       #+#    #+#                 */
+/*   Updated: 2023/05/31 18:04:20 by cbijman       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-void	p_eat(t_philosopher *philo)
+t_philosopher	*recruit_philosopher(t_program *program)
 {
-	//philo->action = EATING;
-}
+	t_philosopher	*person;
+	static int		size = 1;
 
-void	p_sleep(t_philosopher *philo)
-{
-	//philo->action = SLEEPING;
-}
-
-void	p_think(t_philosopher *philo)
-{
-	//philo->action = THINKING;
+	person = ft_calloc(1, sizeof(t_philofunc));
+	person->id = size++;
+	return (person);
 }
