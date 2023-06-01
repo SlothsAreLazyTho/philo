@@ -6,7 +6,7 @@
 /*   By: cbijman <cbijman@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/05/31 17:51:36 by cbijman       #+#    #+#                 */
-/*   Updated: 2023/05/31 18:05:23 by cbijman       ########   odam.nl         */
+/*   Updated: 2023/06/01 16:24:01 by cbijman       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,3 +27,4 @@ void	philosleep(t_program *program, t_table **table, uint32_t time)
 	//	sleep(1);
 	//}
 }
+ 

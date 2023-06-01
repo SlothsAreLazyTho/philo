@@ -6,7 +6,7 @@
 /*   By: cbijman <marvin@codam.nl>                    +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/05/22 18:27:29 by cbijman       #+#    #+#                 */
-/*   Updated: 2023/05/31 18:01:23 by cbijman       ########   odam.nl         */
+/*   Updated: 2023/06/01 17:21:18 by cbijman       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,12 +42,13 @@ typedef enum e_philo_action
 typedef struct s_philosopher
 {
 	int				id;
+	uint64_t		last_time_eat;
 	pthread_t		thread_id;
 }	t_philosopher;
 
 typedef struct s_program
 {
-	t_table			*philos;
+	t_philosopher	**philos;
 	uint32_t		number_of_philosophers;
 	uint32_t		time_to_die;
 	uint32_t		time_to_eat;
@@ -64,17 +65,20 @@ typedef struct s_table
 typedef void	(*t_philofunc)(t_philosopher	*philo);
 
 // Functions
-void	*ft_calloc(int count, int type);
-int		ps_isnumber(char const *str);
-int		safe_atoi(const char *arg);
-int		p_rand(int low_int, int max_int);
-void	p_eat(t_philosopher *philo);
-void	p_sleep(t_philosopher *philo);
-void	p_think(t_philosopher *philo);
-t_table	*ps_newlst(t_philosopher *philo);
-void	ps_lstadd_back(t_table **lst, t_table *nlst);
-int		ps_lstsize(t_table **lst);
-void	loop_time(void);
-int		p_odd_or_even(void);
+void			*ft_calloc(int count, int type);
+int				ps_isnumber(char const *str);
+int				safe_atoi(const char *arg);
+int				p_rand(int low_int, int max_int);
+void			p_eat(t_philosopher *philo);
+void			p_sleep(t_philosopher *philo);
+void			p_think(t_philosopher *philo);
+t_table			*ps_newlst(t_philosopher *philo);
+void			ps_lstadd_back(t_table **lst, t_table *nlst);
+int				ps_lstsize(t_table **lst);
+void			loop_time(void);
+int				p_odd_or_even(void);
+t_philosopher	*recruit_philosopher(t_program *program);
+void			start_action(t_philosopher *philo, t_philofunc func);
+void			start_routine(t_philosopher *philo);
 
 #endif
