@@ -6,7 +6,7 @@
 /*   By: cbijman <marvin@codam.nl>                    +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/05/22 18:27:29 by cbijman       #+#    #+#                 */
-/*   Updated: 2023/06/01 17:21:18 by cbijman       ########   odam.nl         */
+/*   Updated: 2023/06/07 17:57:49 by cbijman       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,12 +43,14 @@ typedef struct s_philosopher
 {
 	int				id;
 	uint64_t		last_time_eat;
+	uint64_t		time_of_born;
 	pthread_t		thread_id;
 }	t_philosopher;
 
 typedef struct s_program
 {
 	t_philosopher	**philos;
+	pthread_mutex_t	**forks;
 	uint32_t		number_of_philosophers;
 	uint32_t		time_to_die;
 	uint32_t		time_to_eat;
@@ -62,7 +64,15 @@ typedef struct s_table
 	struct s_table	*next;
 }	t_table;
 
-typedef void	(*t_philofunc)(t_philosopher	*philo);
+typedef void	(*t_philofunc)(t_philosopher *philo);
+
+typedef struct s_philo_action
+{
+	t_philosopher			*philo;
+	t_philofunc				*func;
+	struct s_philo_action	*next;
+}	t_philoaction;
+
 
 // Functions
 void			*ft_calloc(int count, int type);
@@ -80,5 +90,7 @@ int				p_odd_or_even(void);
 t_philosopher	*recruit_philosopher(t_program *program);
 void			start_action(t_philosopher *philo, t_philofunc func);
 void			start_routine(t_philosopher *philo);
+void			philosleep(t_program *program, uint32_t time);
+void			log_message_with_timestamp(t_philosopher *philo, const char *text);
 
 #endif

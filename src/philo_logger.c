@@ -1,26 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   philo_sleep.c                                      :+:    :+:            */
+/*   philo_logger.c                                     :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: cbijman <cbijman@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2023/05/31 17:51:36 by cbijman       #+#    #+#                 */
-/*   Updated: 2023/06/07 18:06:29 by cbijman       ########   odam.nl         */
+/*   Created: 2023/06/07 17:55:17 by cbijman       #+#    #+#                 */
+/*   Updated: 2023/06/07 18:06:55 by cbijman       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-void	philosleep(t_program *program, uint32_t time)
+void	log_message_with_timestamp(t_philosopher *philo, const char *text)
 {
-	int seconds;
-	
-	seconds = 0;
-	while (seconds < time)
-	{
-		usleep(1000);
-		seconds++;
-	}
+	//struct timeval	val;
+
+	//gettimeofday(&val, 0x0);
+	printf("%ld %d %s", 0,
+		philo->id,
+		text);
 }
- 

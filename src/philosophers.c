@@ -6,7 +6,7 @@
 /*   By: cbijman <cbijman@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/05/31 18:02:05 by cbijman       #+#    #+#                 */
-/*   Updated: 2023/06/01 17:19:48 by cbijman       ########   odam.nl         */
+/*   Updated: 2023/06/07 18:07:13 by cbijman       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,23 +62,12 @@ void	start_action(t_philosopher *philo, t_philofunc func)
 	func(philo);
 }
 
-void	*join_table(void *threadctx)
-{
-	const t_philosopher	*philo = (t_philosopher *) threadctx;
-	
-	if (p_odd_or_even())
-		start_action(philo, p_think);
-	else
-		start_action(philo, p_sleep);
-	return (NULL);
-}
-
 void	prepare_table(t_program *program, int size)
 {
 	size_t			i;
 
 	i = 0;
-	program->philos = ft_calloc(size, sizeof(t_philosopher *));
+	program->philos = ft_calloc(size + 1, sizeof(t_philosopher *));
 	while (i < size)
 	{
 		program->philos[i] = recruit_philosopher(program);
@@ -87,8 +76,9 @@ void	prepare_table(t_program *program, int size)
 		start_routine(program->philos[i]);
 		i++;
 	}
-		
-	//printf("%d philosophers are at the table!\n", ps_lstsize(&table));
+
+	for (int i = 0; program->philos[i]; i++)
+		pthread_join(program->philos[i]->thread_id, program->philos[i]);
 }
 
 int	safe_atoi(const char *arg)
@@ -116,7 +106,7 @@ int	maino(int argc, const char *argv[])
 
 int	main(void)
 {
-	const char	*argv[6] = {"./philosophers", "10", "2000",
+	const char	*argv[6] = {"./philosophers", "2", "2000",
 		"1000", "2000", "5"};
 	return (maino(sizeof(argv) / sizeof(char *), argv));
 }
