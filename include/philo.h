@@ -6,7 +6,7 @@
 /*   By: cbijman <marvin@codam.nl>                    +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/05/22 18:27:29 by cbijman       #+#    #+#                 */
-/*   Updated: 2023/06/07 17:57:49 by cbijman       ########   odam.nl         */
+/*   Updated: 2023/09/19 17:14:32 by cbijman       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,17 +20,6 @@
 # include <unistd.h>
 # include <sys/time.h>
 
-#define __THROW_NOT_IMPLEMENTED() do {	\
-   	printf("Not implemented!\n");		\
-    return ;							\
-} while(0)
-
-#define __THROW_NOT_IMPLEMENTED2() do {	\
-   	printf("Not implemented!\n");		\
-    return (NULL);						\
-} while(0)
-
-//Enums
 typedef enum e_philo_action
 {
 	SLEEPING,
@@ -39,23 +28,26 @@ typedef enum e_philo_action
 	DEAD,
 }	t_action;
 
+typedef struct s_program	t_program;
+
 typedef struct s_philosopher
 {
 	int				id;
-	uint64_t		last_time_eat;
-	uint64_t		time_of_born;
+	unsigned long	last_time_eat;
 	pthread_t		thread_id;
+	t_program		*program;
 }	t_philosopher;
 
 typedef struct s_program
 {
-	t_philosopher	**philos;
-	pthread_mutex_t	**forks;
-	uint32_t		number_of_philosophers;
-	uint32_t		time_to_die;
-	uint32_t		time_to_eat;
-	uint32_t		time_to_sleep;
-	uint32_t		times_to_eat;
+	t_philosopher	*philos;
+	pthread_mutex_t	*forks;
+	unsigned long	time;
+	unsigned int	number_of_philosophers;
+	unsigned int	time_to_die;
+	unsigned int	time_to_eat;
+	unsigned int	time_to_sleep;
+	unsigned int	times_to_eat;
 }	t_program;
 
 typedef struct s_table
@@ -73,15 +65,18 @@ typedef struct s_philo_action
 	struct s_philo_action	*next;
 }	t_philoaction;
 
+//Libft funcs
+void			*ft_calloc(int count, int size);
 
-// Functions
-void			*ft_calloc(int count, int type);
-int				ps_isnumber(char const *str);
-int				safe_atoi(const char *arg);
-int				p_rand(int low_int, int max_int);
+//Actions
 void			p_eat(t_philosopher *philo);
 void			p_sleep(t_philosopher *philo);
 void			p_think(t_philosopher *philo);
+
+// Functions
+int				ps_isnumber(char const *str);
+int				safe_atoi(const char *arg);
+int				p_rand(int low_int, int max_int);
 t_table			*ps_newlst(t_philosopher *philo);
 void			ps_lstadd_back(t_table **lst, t_table *nlst);
 int				ps_lstsize(t_table **lst);
@@ -90,7 +85,7 @@ int				p_odd_or_even(void);
 t_philosopher	*recruit_philosopher(t_program *program);
 void			start_action(t_philosopher *philo, t_philofunc func);
 void			start_routine(t_philosopher *philo);
-void			philosleep(t_program *program, uint32_t time);
+void			philosleep(t_program *program, unsigned int time);
 void			log_message_with_timestamp(t_philosopher *philo, const char *text);
 
 #endif

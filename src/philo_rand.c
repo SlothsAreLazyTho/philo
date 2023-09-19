@@ -6,7 +6,7 @@
 /*   By: cbijman <cbijman@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/05/24 16:30:44 by cbijman       #+#    #+#                 */
-/*   Updated: 2023/05/31 17:40:16 by cbijman       ########   odam.nl         */
+/*   Updated: 2023/09/19 16:33:25 by cbijman       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ static int	lcg_rand(int max_int)
 
 int	p_odd_or_even(void)
 {
-	static int times;
+	static int times = 0;
 
 	times++;
 	return (times % 2);
@@ -47,3 +47,4 @@ int p_rand(int low_int, int max_int)
     old_i = new_i;
     return new_i;
 }
+

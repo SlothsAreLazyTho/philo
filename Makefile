@@ -6,7 +6,7 @@
 #    By: cbijman <cbijman@student.codam.nl>           +#+                      #
 #                                                    +#+                       #
 #    Created: 2023/05/22 18:31:30 by cbijman       #+#    #+#                  #
-#    Updated: 2023/05/24 15:35:00 by cbijman       ########   odam.nl          #
+#    Updated: 2023/09/19 17:16:37 by cbijman       ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
@@ -18,31 +18,12 @@ SRC=src
 BIN=bin
 
 #Files
-HEADER=./include/philo.h
+HEADER= ./include/philo.h
 FILES=$(shell find $(SRC) -type f -name "*.c")
 OBJ=${FILES:$(SRC)/%.c=$(BIN)/%.o}
 
-all: $(NAME) run
+default:
+	$(CC) $(FILES) -I./include -o $(NAME)
+	@./$(NAME)
 
-$(BIN)/%.o: $(SRC)/%.c | $(BIN)
-	$(CC) -Iinclude -c $< -o $@
-
-$(NAME): $(OBJ) $(HEADER)
-	$(CC) -Iinclude $(OBJ) -pthread -o $(NAME)
-
-$(BIN):
-	mkdir -p bin
-
-run:
-	./$(NAME)	
-
-clean:
-	rm -rf $(OBJ) $(BIN)
-
-fclean: clean
-	rm -rf $(NAME)
-
-re: fclean all
-
-.PHONY: all run clean fclean re
-	
+.PHONY: default $(NAME)
