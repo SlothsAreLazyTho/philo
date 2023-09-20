@@ -6,7 +6,7 @@
 /*   By: cbijman <marvin@codam.nl>                    +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/05/22 18:27:29 by cbijman       #+#    #+#                 */
-/*   Updated: 2023/09/19 17:14:32 by cbijman       ########   odam.nl         */
+/*   Updated: 2023/09/20 10:29:37 by cbijman       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ typedef struct s_program
 {
 	t_philosopher	*philos;
 	pthread_mutex_t	*forks;
-	unsigned long	time;
+	time_t			time;
 	unsigned int	number_of_philosophers;
 	unsigned int	time_to_die;
 	unsigned int	time_to_eat;
@@ -67,6 +67,7 @@ typedef struct s_philo_action
 
 //Libft funcs
 void			*ft_calloc(int count, int size);
+time_t			ft_gettime(void);
 
 //Actions
 void			p_eat(t_philosopher *philo);
