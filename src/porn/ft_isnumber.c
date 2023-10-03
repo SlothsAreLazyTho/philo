@@ -1,26 +1,33 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   philo_sleep.c                                      :+:    :+:            */
+/*   ft_isnumber.c                                      :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: cbijman <cbijman@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2023/05/31 17:51:36 by cbijman       #+#    #+#                 */
-/*   Updated: 2023/09/19 17:10:49 by cbijman       ########   odam.nl         */
+/*   Created: 2023/10/03 14:01:00 by cbijman       #+#    #+#                 */
+/*   Updated: 2023/10/03 14:01:37 by cbijman       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "philo.h"
+#include "../../include/philo.h"
 
-void	philosleeps(t_program *program, unsigned long time)
+int	ft_isnumber(char const *str)
 {
-	int seconds;
-	
-	seconds = 0;
-	while (seconds < time)
+	int		i;
+
+	i = 0;
+	if (!str)
+		return (0);
+	if (str[i] == '+')
+		i++;
+	if (str[i] == '\0')
+		return (0);
+	while (str[i])
 	{
-		usleep(1000);
-		seconds++;
+		if (str[i] < '0' || str[i] > '9')
+			return (0);
+		i++;
 	}
+	return (1);
 }
- 

@@ -6,11 +6,13 @@
 /*   By: cbijman <cbijman@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/05/31 18:02:05 by cbijman       #+#    #+#                 */
-/*   Updated: 2023/09/20 10:45:43 by cbijman       ########   odam.nl         */
+/*   Updated: 2023/10/03 15:34:53 by cbijman       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
+
+void	*routine(void *threadctx);
 
 void	print_program_variables(t_program *program)
 {
@@ -26,6 +28,34 @@ number_of_times_each_philosopher_must_eat [Optional]: %d\n",
 		program->times_to_eat);
 }
 
+bool	loop_through_all_philos(t_program *program, void *(*f)(t_program *, t_philosopher *), t_philosopher *obj)
+{
+	size_t	i;
+
+	i = 0;
+	if (!obj)
+		return (false);
+	while (i < program->number_of_philosophers)
+	{
+		if (!f(program, &obj[i]))
+			return (false);
+		obj[i].id = i;
+		i++;
+	}
+	return (true);	
+}
+
+void	*philo_new(t_program *program, t_philosopher *philo)
+{
+	if (!philo)
+		return (NULL);
+	philo->program = program;
+	pthread_mutex_init(&philo->left_fork, NULL);
+	pthread_mutex_init(&philo->right_fork, NULL);
+	pthread_create(&philo->thread_id, NULL, routine, philo);
+	return (philo);
+}
+
 void	philosleep(t_program *program, unsigned int time)
 {
 	int seconds;
@@ -38,26 +68,6 @@ void	philosleep(t_program *program, unsigned int time)
 	}
 }
 
-int	ps_isnumber(char const *str)
-{
-	int		i;
-
-	i = 0;
-	if (!str)
-		return (0);
-	if (str[i] == '+')
-		i++;
-	if (str[i] == '\0')
-		return (0);
-	while (str[i])
-	{
-		if (str[i] < '0' || str[i] > '9')
-			return (0);
-		i++;
-	}
-	return (1);
-}
-
 void	start_action(t_philosopher *philo, t_philofunc func)
 {
 	func(philo);
@@ -65,59 +75,40 @@ void	start_action(t_philosopher *philo, t_philofunc func)
 
 void	*routine(void *threadctx)
 {
-	const int		choice = p_odd_or_even();
 	t_philosopher	*philo;
 
 	if (!threadctx)
 		return (NULL);
 	philo = (t_philosopher *) threadctx;
 	printf("%d sits at the table\n", philo->id);
-	if (choice)
+	if (philo->id % 2)
 		p_think(philo);
 	else
 		p_sleep(philo);
 	return (NULL);
 }
 
-void	prepare_table(t_program *program, int size)
-{
-	size_t	i;
-
-	i = 0;
-	program->philos = malloc(size * sizeof(t_philosopher *));
-	while (i < size)
-	{
-		program->philos[i].id = i;
-		program->philos[i].program = program;
-		if (pthread_create(&(program->philos[i].thread_id), NULL, routine, &(program->philos[i])) != 0)
-		{
-			i++;
-			continue ;
-		}
-		i++;
-	}
-	
-	i = 0;
-	while (i < size)
-	{
-		pthread_join(program->philos[i].thread_id, NULL);
-		i++;
-	}
-}
-
 int	safe_atoi(const char *arg)
 {
 	if (!arg)
 		return (0);
-	if (!ps_isnumber(arg))
+	if (!ft_isnumber(arg))
 		return (0);
 	return (atoi(arg));
+}
+
+void	cool(t_program *program, t_philosopher **philos)
+{
+	*philos = ft_calloc(program->number_of_philosophers, sizeof(t_philosopher));
 }
 
 int	maino(int argc, const char *argv[])
 {
 	t_program		*program;
+	t_philosopher	*philosophers;
+
 	struct timeval	val;
+	size_t			i;
 	
 	program = ft_calloc(1, sizeof(t_program));
 	program->number_of_philosophers = safe_atoi(argv[1]);
@@ -125,15 +116,30 @@ int	maino(int argc, const char *argv[])
 	program->time_to_eat = safe_atoi(argv[3]);
 	program->time_to_sleep = safe_atoi(argv[4]);
 	program->times_to_eat = safe_atoi(argv[5]);
-
 	program->time = ft_gettime();
 	//print_program_variables(program);
-	prepare_table(program, program->number_of_philosophers);
+	
+	cool(program, &philosophers);
+	loop_through_all_philos(program, philo_new, philosophers);
+	
+	i = 0;
+	while (i < program->number_of_philosophers)
+	{
+		pthread_join(philosophers[i].thread_id, NULL);
+		i++;
+	}
 	return (0);
 }
 
 int	main(void)
 {
-	const char	*argv[6] = {"./philosophers", "100", "210", "100", "100", "5"};
+	const char	*argv[6] = {
+		"./philosophers",
+		"5",
+		"210",
+		"100",
+		"100",
+		"5"};
+
 	return (maino(sizeof(argv) / sizeof(char *), argv));
 }
