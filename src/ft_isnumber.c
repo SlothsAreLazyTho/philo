@@ -1,24 +1,33 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   ft_gettime.c                                       :+:    :+:            */
+/*   ft_isnumber.c                                      :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: cbijman <cbijman@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2023/09/20 10:29:01 by cbijman       #+#    #+#                 */
-/*   Updated: 2023/09/20 10:29:18 by cbijman       ########   odam.nl         */
+/*   Created: 2023/10/03 14:01:00 by cbijman       #+#    #+#                 */
+/*   Updated: 2023/10/05 13:46:08 by cbijman       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../include/philo.h"
+#include "../include/philo.h"
 
-time_t	ft_gettime(void)
+int	ft_isnumber(char const *str)
 {
-	struct timeval	val;
-	time_t			time;
+	int		i;
 
-	gettimeofday(&val, NULL);
-	time = val.tv_usec / 1000;
-	time += val.tv_sec * 1000;
-	return (time);
+	i = 0;
+	if (!str)
+		return (0);
+	if (str[i] == '+')
+		i++;
+	if (str[i] == '\0')
+		return (0);
+	while (str[i])
+	{
+		if (str[i] < '0' || str[i] > '9')
+			return (0);
+		i++;
+	}
+	return (1);
 }

@@ -6,7 +6,7 @@
 /*   By: cbijman <marvin@codam.nl>                    +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/05/22 18:27:29 by cbijman       #+#    #+#                 */
-/*   Updated: 2023/10/03 15:27:24 by cbijman       ########   odam.nl         */
+/*   Updated: 2023/10/05 15:16:17 by cbijman       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,11 @@
 # include <string.h>
 # include <pthread.h>
 # include <unistd.h>
+# include <stddef.h>
 # include <sys/time.h>
+# include <sys/types.h>
+
+typedef	int t_fork_id;
 
 typedef enum e_philo_action
 {
@@ -32,23 +36,24 @@ typedef struct s_program	t_program;
 
 typedef struct s_philosopher
 {
-	int				id;
-	unsigned long	last_time_eat;
-	pthread_t		thread_id;
-	pthread_mutex_t	left_fork;
-	pthread_mutex_t	right_fork;
-	t_program		*program;
+	u_int32_t	id;
+	u_int64_t	last_time_eat;
+	pthread_t	thread_id;
+	t_program	*program;
+	t_fork_id	left_fork;
+	t_fork_id	right_fork;
 }	t_philosopher;
 
 typedef struct s_program
 {
 	pthread_mutex_t	*forks;
+	pthread_mutex_t can_write;
 	time_t			time;
-	unsigned int	number_of_philosophers;
-	unsigned int	time_to_die;
-	unsigned int	time_to_eat;
-	unsigned int	time_to_sleep;
-	unsigned int	times_to_eat;
+	u_int32_t		nb_of_philos;
+	u_int32_t		time_to_die;
+	u_int32_t		time_to_eat;
+	u_int32_t		time_to_sleep;
+	u_int32_t		times_eat;
 }	t_program;
 
 typedef void	(*t_philofunc)(t_philosopher *philo);
