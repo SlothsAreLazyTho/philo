@@ -6,7 +6,7 @@
 /*   By: cbijman <cbijman@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/05/31 18:02:05 by cbijman       #+#    #+#                 */
-/*   Updated: 2023/10/05 15:20:38 by cbijman       ########   odam.nl         */
+/*   Updated: 2023/10/09 16:21:57 by cbijman       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,6 @@ bool	loop_through_all_philos(t_program *program, void *(*f)(t_program *, t_philo
 	{
 		if (!f(program, &obj[i], i))
 			return (false);
-		obj[i].id = i;
 		i++;
 	}
 	return (true);	
@@ -49,6 +48,7 @@ void	*philo_new(t_program *program, t_philosopher *philo, int id)
 {
 	if (!philo)
 		return (NULL);
+	philo->id = id;
 	philo->program = program;
 	philo->left_fork = id;
 	philo->right_fork = (id + 1) % program->nb_of_philos;
@@ -58,19 +58,15 @@ void	*philo_new(t_program *program, t_philosopher *philo, int id)
 
 void	philosleep(t_program *program, unsigned int time)
 {
-	int seconds;
+	const time_t	start = ft_gettime();
+	time_t			seconds;
 	
 	seconds = 0;
 	while (seconds < time)
 	{
-		usleep(1000);
-		seconds++;
+		usleep(100);
+		seconds = ft_gettime() - start;
 	}
-}
-
-void	start_action(t_philosopher *philo, t_philofunc func)
-{
-	func(philo);
 }
 
 void	*routine(void *threadctx)
@@ -80,11 +76,10 @@ void	*routine(void *threadctx)
 	if (!threadctx)
 		return (NULL);
 	philo = (t_philosopher *) threadctx;
-	//printf("%d sits at the table\n", philo->id);
 	if (philo->id % 2)
 		p_think(philo);
 	else
-		p_sleep(philo);
+		p_eat(philo);
 	return (NULL);
 }
 
@@ -101,7 +96,7 @@ void	program_init(t_program **program, int argc, const char **argv)
 {
 	t_program	*obj;
 	
-	obj = ft_calloc(1, sizeof(t_program));
+	obj = malloc(sizeof(t_program));
 	if (!obj)
 		return (exit(1));
 	obj->nb_of_philos = safe_atoi(argv[1]);
@@ -112,7 +107,7 @@ void	program_init(t_program **program, int argc, const char **argv)
 	obj->time = ft_gettime();
 	
 	pthread_mutex_init(&obj->can_write, NULL);
-
+	pthread_mutex_init(&obj->can_eat, NULL);
 	*program = obj;
 }
 
@@ -133,7 +128,7 @@ void	philo_init(t_program *program, t_philosopher **philo)
 {
 	(*philo) = ft_calloc(program->nb_of_philos, sizeof(t_philosopher));
 	if (!*philo)
-		return (exit(1));
+		return (exit(1)); //Make checks
 	loop_through_all_philos(program, philo_new, *philo);
 }
 
@@ -160,7 +155,7 @@ int	main(void)
 {
 	const char	*argv[6] = {
 		"./philosophers",
-		"5",
+		"500",
 		"210",
 		"100",
 		"100",

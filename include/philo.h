@@ -6,7 +6,7 @@
 /*   By: cbijman <marvin@codam.nl>                    +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/05/22 18:27:29 by cbijman       #+#    #+#                 */
-/*   Updated: 2023/10/05 15:16:17 by cbijman       ########   odam.nl         */
+/*   Updated: 2023/10/09 16:20:51 by cbijman       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,18 +36,20 @@ typedef struct s_program	t_program;
 
 typedef struct s_philosopher
 {
-	u_int32_t	id;
-	u_int64_t	last_time_eat;
-	pthread_t	thread_id;
-	t_program	*program;
-	t_fork_id	left_fork;
-	t_fork_id	right_fork;
+	u_int32_t		id;
+	pthread_t		thread_id;
+	u_int64_t		last_time_eat;
+	t_fork_id		left_fork;
+	t_fork_id		right_fork;
+	bool			can_eat;
+	t_program		*program;
 }	t_philosopher;
 
 typedef struct s_program
 {
 	pthread_mutex_t	*forks;
-	pthread_mutex_t can_write;
+	pthread_mutex_t	can_write;
+	pthread_mutex_t	can_eat;
 	time_t			time;
 	u_int32_t		nb_of_philos;
 	u_int32_t		time_to_die;
@@ -57,13 +59,6 @@ typedef struct s_program
 }	t_program;
 
 typedef void	(*t_philofunc)(t_philosopher *philo);
-
-typedef struct s_philo_action
-{
-	t_philosopher			*philo;
-	t_philofunc				*func;
-	struct s_philo_action	*next;
-}	t_philoaction;
 
 //Libft funcs
 void			*ft_calloc(int count, int size);
