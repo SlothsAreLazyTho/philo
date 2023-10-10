@@ -6,7 +6,7 @@
 /*   By: cbijman <cbijman@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/05/31 18:02:05 by cbijman       #+#    #+#                 */
-/*   Updated: 2023/10/09 16:21:57 by cbijman       ########   odam.nl         */
+/*   Updated: 2023/10/10 14:14:04 by cbijman       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ bool	loop_through_all_philos(t_program *program, void *(*f)(t_program *, t_philo
 			return (false);
 		i++;
 	}
-	return (true);	
+	return (true);
 }
 
 void	*philo_new(t_program *program, t_philosopher *philo, int id)
@@ -52,21 +52,9 @@ void	*philo_new(t_program *program, t_philosopher *philo, int id)
 	philo->program = program;
 	philo->left_fork = id;
 	philo->right_fork = (id + 1) % program->nb_of_philos;
+	pthread_mutex_init(&philo->eat_lock, NULL);
 	pthread_create(&philo->thread_id, NULL, routine, philo);
 	return (philo);
-}
-
-void	philosleep(t_program *program, unsigned int time)
-{
-	const time_t	start = ft_gettime();
-	time_t			seconds;
-	
-	seconds = 0;
-	while (seconds < time)
-	{
-		usleep(100);
-		seconds = ft_gettime() - start;
-	}
 }
 
 void	*routine(void *threadctx)
@@ -119,8 +107,11 @@ bool	fork_init(t_program	*program)
 	program->forks = malloc(program->nb_of_philos * sizeof(pthread_mutex_t));
 	if (!program->forks)
 		return (false);
-	while (i < program->nb_of_philos && pthread_mutex_init(&program->forks[i], NULL) == 0)
+	while (i < program->nb_of_philos)
+	{
+		printf("Fork: %d\n", pthread_mutex_init(&program->forks[i], NULL));
 		i++;
+	}
 	return (i == program->nb_of_philos);
 }
 
@@ -141,7 +132,8 @@ int	maino(int ac, const char **av)
 	program_init(&program, ac, av);
 	fork_init(program);
 	philo_init(program, &philosophers);
-	
+
+	pthread_mutex_init(&program->can_write, NULL);
 	i = 0;
 	while (i < program->nb_of_philos)
 	{
@@ -155,10 +147,10 @@ int	main(void)
 {
 	const char	*argv[6] = {
 		"./philosophers",
-		"500",
-		"210",
-		"100",
-		"100",
+		"4",
+		"410", //Time to die
+		"200", //Time to sleep
+		"100", //Time to eat
 		"5"};
 
 	return (maino(sizeof(argv) / sizeof(char *), argv));

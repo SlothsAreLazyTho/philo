@@ -1,20 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   philo_logger.c                                     :+:    :+:            */
+/*   ft_usleep.c                                        :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: cbijman <cbijman@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2023/06/07 17:55:17 by cbijman       #+#    #+#                 */
-/*   Updated: 2023/10/10 14:12:27 by cbijman       ########   odam.nl         */
+/*   Created: 2023/10/10 13:34:18 by cbijman       #+#    #+#                 */
+/*   Updated: 2023/10/10 13:36:47 by cbijman       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "philo.h"
+#include "../include/philo.h"
 
-void	log_message_with_timestamp(t_philosopher *philo, const char *text)
+void	ft_usleep(unsigned int time)
 {
-	pthread_mutex_lock(&philo->program->can_write);
-	printf("%ld %d %s", ft_gettime() - philo->program->time, philo->id, text);
-	pthread_mutex_unlock(&philo->program->can_write);
+	const time_t	start = ft_gettime();
+	time_t			seconds;
+	
+	seconds = 0;
+	while (seconds < time)
+	{
+		usleep(200);
+		seconds = ft_gettime() - start;
+	}
 }

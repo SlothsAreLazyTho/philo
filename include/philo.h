@@ -6,7 +6,7 @@
 /*   By: cbijman <marvin@codam.nl>                    +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/05/22 18:27:29 by cbijman       #+#    #+#                 */
-/*   Updated: 2023/10/09 16:20:51 by cbijman       ########   odam.nl         */
+/*   Updated: 2023/10/10 13:52:22 by cbijman       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,7 @@ typedef struct s_philosopher
 	u_int64_t		last_time_eat;
 	t_fork_id		left_fork;
 	t_fork_id		right_fork;
+	pthread_mutex_t	eat_lock;
 	bool			can_eat;
 	t_program		*program;
 }	t_philosopher;
@@ -64,6 +65,7 @@ typedef void	(*t_philofunc)(t_philosopher *philo);
 void			*ft_calloc(int count, int size);
 time_t			ft_gettime(void);
 int				ft_isnumber(char const *str);
+void			ft_usleep(unsigned int time);
 
 //Actions
 void			p_eat(t_philosopher *philo);
@@ -75,7 +77,6 @@ int				safe_atoi(const char *arg);
 int				p_rand(int low_int, int max_int);
 void			loop_time(void);
 void			start_action(t_philosopher *philo, t_philofunc func);
-void			philosleep(t_program *program, unsigned int time);
 void			log_message_with_timestamp(t_philosopher *philo, const char *text);
 
 #endif
