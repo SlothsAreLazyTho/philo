@@ -6,7 +6,7 @@
 /*   By: cbijman <cbijman@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/05/31 18:02:05 by cbijman       #+#    #+#                 */
-/*   Updated: 2023/10/10 14:14:04 by cbijman       ########   odam.nl         */
+/*   Updated: 2023/10/10 14:51:58 by cbijman       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@ void	*routine(void *threadctx)
 		return (NULL);
 	philo = (t_philosopher *) threadctx;
 	if (philo->id % 2)
-		p_think(philo);
+		p_sleep(philo);
 	else
 		p_eat(philo);
 	return (NULL);
@@ -87,11 +87,11 @@ void	program_init(t_program **program, int argc, const char **argv)
 	obj = malloc(sizeof(t_program));
 	if (!obj)
 		return (exit(1));
-	obj->nb_of_philos = safe_atoi(argv[1]);
-	obj->time_to_die = safe_atoi(argv[2]);
-	obj->time_to_eat = safe_atoi(argv[3]);
-	obj->time_to_sleep = safe_atoi(argv[4]);
-	obj->times_eat = safe_atoi(argv[5]);
+	obj->nb_of_philos = atoi(argv[1]);
+	obj->time_to_die = atoi(argv[2]);
+	obj->time_to_eat = atoi(argv[3]);
+	obj->time_to_sleep = atoi(argv[4]);
+	obj->times_eat = atoi(argv[5]);
 	obj->time = ft_gettime();
 	
 	pthread_mutex_init(&obj->can_write, NULL);
@@ -133,7 +133,6 @@ int	maino(int ac, const char **av)
 	fork_init(program);
 	philo_init(program, &philosophers);
 
-	pthread_mutex_init(&program->can_write, NULL);
 	i = 0;
 	while (i < program->nb_of_philos)
 	{
@@ -150,7 +149,7 @@ int	main(void)
 		"4",
 		"410", //Time to die
 		"200", //Time to sleep
-		"100", //Time to eat
+		"200", //Time to eat
 		"5"};
 
 	return (maino(sizeof(argv) / sizeof(char *), argv));

@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   philo_actions.c                                    :+:    :+:            */
+/*   actions.c                                          :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: cbijman <cbijman@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/05/22 18:46:53 by cbijman       #+#    #+#                 */
-/*   Updated: 2023/10/10 13:55:59 by cbijman       ########   odam.nl         */
+/*   Updated: 2023/10/10 14:55:50 by cbijman       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,20 +16,14 @@ void	p_eat(t_philosopher *philo)
 {
 	pthread_mutex_lock(&philo->program->forks[philo->right_fork]);
 	log_message_with_timestamp(philo, "has taken a fork\n");
-	pthread_mutex_unlock(&philo->program->forks[philo->right_fork]);
-	
 	pthread_mutex_lock(&philo->program->forks[philo->left_fork]);
 	log_message_with_timestamp(philo, "has taken a fork\n");
-	pthread_mutex_unlock(&philo->program->forks[philo->left_fork]);
-	
-	pthread_mutex_lock(&philo->eat_lock);
 	log_message_with_timestamp(philo, "is eating\n");
 	ft_usleep(philo->program->time_to_eat);
-	pthread_mutex_unlock(&philo->eat_lock);
+	pthread_mutex_unlock(&philo->program->forks[philo->left_fork]);
+	pthread_mutex_unlock(&philo->program->forks[philo->right_fork]);
 	p_sleep(philo);
 }
-
-
 
 void	p_sleep(t_philosopher *philo)
 {
