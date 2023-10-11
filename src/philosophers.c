@@ -6,7 +6,7 @@
 /*   By: cbijman <cbijman@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/05/31 18:02:05 by cbijman       #+#    #+#                 */
-/*   Updated: 2023/10/10 14:51:58 by cbijman       ########   odam.nl         */
+/*   Updated: 2023/10/11 15:21:25 by cbijman       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,7 +109,8 @@ bool	fork_init(t_program	*program)
 		return (false);
 	while (i < program->nb_of_philos)
 	{
-		printf("Fork: %d\n", pthread_mutex_init(&program->forks[i], NULL));
+		if (pthread_mutex_init(&program->forks[i], NULL) != 0)
+			return (false);
 		i++;
 	}
 	return (i == program->nb_of_philos);
@@ -146,10 +147,10 @@ int	main(void)
 {
 	const char	*argv[6] = {
 		"./philosophers",
-		"4",
+		"400",
 		"410", //Time to die
 		"200", //Time to sleep
-		"200", //Time to eat
+		"100", //Time to eat
 		"5"};
 
 	return (maino(sizeof(argv) / sizeof(char *), argv));
