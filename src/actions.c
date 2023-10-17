@@ -6,7 +6,7 @@
 /*   By: cbijman <cbijman@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/05/22 18:46:53 by cbijman       #+#    #+#                 */
-/*   Updated: 2023/10/17 14:55:08 by cbijman       ########   odam.nl         */
+/*   Updated: 2023/10/17 15:07:46 by cbijman       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,8 +28,11 @@ bool	p_eat(t_philosopher *philo)
 {
 	lock_fork(philo, RIGHT_FORK);
 	lock_fork(philo, LEFT_FORK);
+	pthread_mutex_lock(&philo->lock);
 	log_message_with_timestamp(philo, "is eating\n");
+	philo->last_time_eat = ft_gettime();
 	ft_usleep(philo->program->time_to_eat);
+	pthread_mutex_unlock(&philo->lock);
 	pthread_mutex_unlock(&philo->program->forks[philo->left_fork]);
 	pthread_mutex_unlock(&philo->program->forks[philo->right_fork]);
 	return (true);

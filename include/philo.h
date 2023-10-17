@@ -6,7 +6,7 @@
 /*   By: cbijman <marvin@codam.nl>                    +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/05/22 18:27:29 by cbijman       #+#    #+#                 */
-/*   Updated: 2023/10/17 13:45:24 by cbijman       ########   odam.nl         */
+/*   Updated: 2023/10/17 15:11:11 by cbijman       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@
 # include <sys/time.h>
 # include <sys/types.h>
 
-typedef	int t_fork_id;
+typedef	int	t_fork_id;
 
 typedef enum e_philo_action
 {
@@ -38,11 +38,10 @@ typedef struct s_philosopher
 {
 	u_int32_t		id;
 	pthread_t		thread_id;
-	u_int64_t		last_time_eat;
 	t_fork_id		left_fork;
 	t_fork_id		right_fork;
-	pthread_mutex_t	eat_lock;
-	bool			can_eat;
+	pthread_mutex_t	lock;
+	u_int64_t		last_time_eat;
 	t_program		*program;
 }	t_philosopher;
 
@@ -66,6 +65,9 @@ void			*ft_calloc(int count, int size);
 time_t			ft_gettime(void);
 int				ft_isnumber(char const *str);
 void			ft_usleep(unsigned int time);
+size_t			ft_getmicroseconds(struct timeval time);
+size_t			ft_gettimediff(struct timeval start, struct timeval end);
+
 
 //Actions
 bool			p_eat(t_philosopher *philo);

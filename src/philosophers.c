@@ -6,7 +6,7 @@
 /*   By: cbijman <cbijman@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/05/31 18:02:05 by cbijman       #+#    #+#                 */
-/*   Updated: 2023/10/17 14:56:46 by cbijman       ########   odam.nl         */
+/*   Updated: 2023/10/17 15:06:35 by cbijman       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,10 +53,11 @@ void	*philo_new(t_program *program, int id)
 	philo = malloc(sizeof(t_philosopher));
 	if (!philo)
 		return (NULL);
-	philo->id = (id + 1);
+	philo->id = id;
 	philo->program = program;
 	philo->left_fork = id;
 	philo->right_fork = (id + 1) % program->nb_of_philos;
+	pthread_mutex_init(&philo->lock, NULL);
 	pthread_create(&philo->thread_id, NULL, routine, philo);
 	return (philo);
 }
