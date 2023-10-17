@@ -6,7 +6,7 @@
 #    By: cbijman <cbijman@student.codam.nl>           +#+                      #
 #                                                    +#+                       #
 #    Created: 2023/05/22 18:31:30 by cbijman       #+#    #+#                  #
-#    Updated: 2023/10/10 14:14:55 by cbijman       ########   odam.nl          #
+#    Updated: 2023/10/17 13:43:59 by cbijman       ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
@@ -40,4 +40,6 @@ bin:
 clean:
 	rm -rf $(OBJ_FOLDER)
 
-.PHONY: default all debug clean
+re: clean all
+
+.PHONY: default all debug clean re

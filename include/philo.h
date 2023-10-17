@@ -6,7 +6,7 @@
 /*   By: cbijman <marvin@codam.nl>                    +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/05/22 18:27:29 by cbijman       #+#    #+#                 */
-/*   Updated: 2023/10/10 13:52:22 by cbijman       ########   odam.nl         */
+/*   Updated: 2023/10/17 13:45:24 by cbijman       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,9 +68,9 @@ int				ft_isnumber(char const *str);
 void			ft_usleep(unsigned int time);
 
 //Actions
-void			p_eat(t_philosopher *philo);
-void			p_sleep(t_philosopher *philo);
-void			p_think(t_philosopher *philo);
+bool			p_eat(t_philosopher *philo);
+bool			p_sleep(t_philosopher *philo);
+bool			p_think(t_philosopher *philo);
 
 // Functions
 int				safe_atoi(const char *arg);

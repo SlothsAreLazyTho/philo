@@ -6,56 +6,11 @@
 /*   By: cbijman <cbijman@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/05/31 18:02:05 by cbijman       #+#    #+#                 */
-/*   Updated: 2023/10/11 15:21:25 by cbijman       ########   odam.nl         */
+/*   Updated: 2023/10/17 14:56:46 by cbijman       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
-
-void	*routine(void *threadctx);
-
-void	print_program_variables(t_program *program)
-{
-	printf("nb_of_philos: %d,\n\
-time_to_die: %dms,\n\
-time_to_eat: %dms,\n\
-time_to_sleep: %dms,\n\
-number_of_times_each_philosopher_must_eat [Optional]: %d\n",
-		program->nb_of_philos,
-		program->time_to_die,
-		program->time_to_eat,
-		program->time_to_sleep,
-		program->times_eat);
-}
-
-bool	loop_through_all_philos(t_program *program, void *(*f)(t_program *, t_philosopher *, int), t_philosopher *obj)
-{
-	size_t	i;
-
-	i = 0;
-	if (!obj)
-		return (false);
-	while (i < program->nb_of_philos)
-	{
-		if (!f(program, &obj[i], i))
-			return (false);
-		i++;
-	}
-	return (true);
-}
-
-void	*philo_new(t_program *program, t_philosopher *philo, int id)
-{
-	if (!philo)
-		return (NULL);
-	philo->id = id;
-	philo->program = program;
-	philo->left_fork = id;
-	philo->right_fork = (id + 1) % program->nb_of_philos;
-	pthread_mutex_init(&philo->eat_lock, NULL);
-	pthread_create(&philo->thread_id, NULL, routine, philo);
-	return (philo);
-}
 
 void	*routine(void *threadctx)
 {
@@ -64,20 +19,46 @@ void	*routine(void *threadctx)
 	if (!threadctx)
 		return (NULL);
 	philo = (t_philosopher *) threadctx;
-	if (philo->id % 2)
-		p_sleep(philo);
+	if (philo->id % 2 != 0)
+	{
+		while (true)
+		{
+			if (!p_think(philo))
+				return (NULL);
+			if (!p_eat(philo))
+				return (NULL);
+			if (!p_sleep(philo))
+				return (NULL);
+		}
+	}
 	else
-		p_eat(philo);
-	return (NULL);
+	{
+		while (true)
+		{
+			if (!p_eat(philo))
+				return (NULL);
+			if (!p_sleep(philo))
+				return (NULL);
+			if (!p_think(philo))
+				return (NULL);
+		}
+	}
+	return (philo);
 }
 
-int	safe_atoi(const char *arg)
+void	*philo_new(t_program *program, int id)
 {
-	if (!arg)
-		return (0);
-	if (!ft_isnumber(arg))
-		return (0);
-	return (atoi(arg));
+	t_philosopher *philo;
+	
+	philo = malloc(sizeof(t_philosopher));
+	if (!philo)
+		return (NULL);
+	philo->id = (id + 1);
+	philo->program = program;
+	philo->left_fork = id;
+	philo->right_fork = (id + 1) % program->nb_of_philos;
+	pthread_create(&philo->thread_id, NULL, routine, philo);
+	return (philo);
 }
 
 void	program_init(t_program **program, int argc, const char **argv)
@@ -99,59 +80,59 @@ void	program_init(t_program **program, int argc, const char **argv)
 	*program = obj;
 }
 
-bool	fork_init(t_program	*program)
+int	main(void)
 {
-	size_t	i;
-
-	i = 0;
-	program->forks = malloc(program->nb_of_philos * sizeof(pthread_mutex_t));
-	if (!program->forks)
-		return (false);
-	while (i < program->nb_of_philos)
-	{
-		if (pthread_mutex_init(&program->forks[i], NULL) != 0)
-			return (false);
-		i++;
-	}
-	return (i == program->nb_of_philos);
-}
-
-void	philo_init(t_program *program, t_philosopher **philo)
-{
-	(*philo) = ft_calloc(program->nb_of_philos, sizeof(t_philosopher));
-	if (!*philo)
-		return (exit(1)); //Make checks
-	loop_through_all_philos(program, philo_new, *philo);
-}
-
-int	maino(int ac, const char **av)
-{
+	int ac = 6;
+	const char	*av[6] = { "./philosophers",
+		"5",
+		"310", //Time to die
+		"100", //Time to sleep
+		"100", //Time to eat
+		"5"}; //Optional: times to eat
+	
 	t_program		*program;
-	t_philosopher	*philosophers;
+	t_philosopher	**philosophers;
 	size_t			i;
 
+	//Redo initialization
 	program_init(&program, ac, av);
-	fork_init(program);
-	philo_init(program, &philosophers);
+
+	//Forks initilization
+	{
+		i = 0;
+		program->forks = malloc(program->nb_of_philos * sizeof(pthread_mutex_t));
+		if (!program->forks)
+			return (0);
+		while (i < program->nb_of_philos)
+		{
+			if (pthread_mutex_init(&program->forks[i], NULL) != 0)
+				return (printf("Forks cannot be initializated\n"), 0);
+			i++;
+		}
+	}
+
+	//Philosophers Initialization
+	{
+		i = 0;
+		philosophers = malloc(program->nb_of_philos * sizeof(t_philosopher));
+		if (!philosophers)
+			return (0);
+		while (i < program->nb_of_philos)
+		{
+			philosophers[i] = philo_new(program, i);
+			if (!philosophers[i])
+				return (printf("Error creating philosopher exiting...\n"), 0);
+			i++;
+		}
+	}
+	
+	//Redo initiailizaition
 
 	i = 0;
 	while (i < program->nb_of_philos)
 	{
-		pthread_join(philosophers[i].thread_id, NULL);
+		pthread_join(philosophers[i]->thread_id, NULL);
 		i++;
 	}
 	return (0);
-}
-
-int	main(void)
-{
-	const char	*argv[6] = {
-		"./philosophers",
-		"400",
-		"410", //Time to die
-		"200", //Time to sleep
-		"100", //Time to eat
-		"5"};
-
-	return (maino(sizeof(argv) / sizeof(char *), argv));
 }
