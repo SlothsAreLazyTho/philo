@@ -6,7 +6,7 @@
 #    By: cbijman <cbijman@student.codam.nl>           +#+                      #
 #                                                    +#+                       #
 #    Created: 2023/05/22 18:31:30 by cbijman       #+#    #+#                  #
-#    Updated: 2023/10/17 13:43:59 by cbijman       ########   odam.nl          #
+#    Updated: 2023/10/18 17:35:28 by cbijman       ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
@@ -40,6 +40,9 @@ bin:
 clean:
 	rm -rf $(OBJ_FOLDER)
 
-re: clean all
+fclean:
+	rm -rf $(NAME) $(OBJ_FOLDER)
 
-.PHONY: default all debug clean re
+re: fclean all
+
+.PHONY: default all debug clean fclean re

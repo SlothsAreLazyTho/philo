@@ -6,7 +6,7 @@
 /*   By: cbijman <cbijman@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/05/22 18:46:53 by cbijman       #+#    #+#                 */
-/*   Updated: 2023/10/18 15:25:28 by cbijman       ########   odam.nl         */
+/*   Updated: 2023/10/18 17:52:21 by cbijman       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,7 @@ bool	p_eat(t_philosopher *philo)
 	lock_forks(philo);
 	// BEGIN -> Eating process
 	pthread_mutex_lock(&philo->lock);
+	//printf("Philo over death? %s\t%ld\n", ft_gettime() - philo->last_time_eat > 0 ? "should be ALIVE" : "Nope still DEAD", ft_gettime() - philo->last_time_eat);
 	ft_log(philo, "is eating\n");
 	ft_usleep(philo->program->time_to_eat);
 	philo->last_time_eat = ft_gettime();

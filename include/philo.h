@@ -6,7 +6,7 @@
 /*   By: cbijman <marvin@codam.nl>                    +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/05/22 18:27:29 by cbijman       #+#    #+#                 */
-/*   Updated: 2023/10/18 15:24:57 by cbijman       ########   odam.nl         */
+/*   Updated: 2023/10/18 17:31:05 by cbijman       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,8 +48,8 @@ typedef struct s_philosopher
 typedef struct s_program
 {
 	pthread_mutex_t	*forks;
-	pthread_mutex_t	can_write;
-	pthread_mutex_t	startup_lock;
+	pthread_mutex_t	lock;
+	pthread_mutex_t	write_lock;
 	time_t			time;
 	u_int32_t		nb_of_philos;
 	u_int32_t		time_to_die;
