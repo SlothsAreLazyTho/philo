@@ -6,7 +6,7 @@
 /*   By: cbijman <cbijman@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/09/20 10:29:01 by cbijman       #+#    #+#                 */
-/*   Updated: 2023/10/05 13:46:11 by cbijman       ########   odam.nl         */
+/*   Updated: 2023/10/18 14:42:11 by cbijman       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,6 @@ time_t	ft_gettime(void)
 	time_t			time;
 
 	gettimeofday(&val, NULL);
-	time = val.tv_usec / 1000;
-	time += val.tv_sec * 1000;
+	time = ft_getmilliseconds(val);
 	return (time);
 }

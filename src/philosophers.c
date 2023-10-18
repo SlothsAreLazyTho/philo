@@ -6,7 +6,7 @@
 /*   By: cbijman <cbijman@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/05/31 18:02:05 by cbijman       #+#    #+#                 */
-/*   Updated: 2023/10/17 15:06:35 by cbijman       ########   odam.nl         */
+/*   Updated: 2023/10/18 17:14:28 by cbijman       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,11 +14,10 @@
 
 void	*routine(void *threadctx)
 {
-	t_philosopher	*philo;
+	t_philosopher	*philo = (t_philosopher *) threadctx;
 
-	if (!threadctx)
-		return (NULL);
-	philo = (t_philosopher *) threadctx;
+	pthread_mutex_lock(&philo->program->startup_lock);
+	pthread_mutex_unlock(&philo->program->startup_lock);
 	if (philo->id % 2 != 0)
 	{
 		while (true)
@@ -53,12 +52,11 @@ void	*philo_new(t_program *program, int id)
 	philo = malloc(sizeof(t_philosopher));
 	if (!philo)
 		return (NULL);
-	philo->id = id;
+	philo->id = (id + 1);
 	philo->program = program;
 	philo->left_fork = id;
 	philo->right_fork = (id + 1) % program->nb_of_philos;
 	pthread_mutex_init(&philo->lock, NULL);
-	pthread_create(&philo->thread_id, NULL, routine, philo);
 	return (philo);
 }
 
@@ -77,7 +75,7 @@ void	program_init(t_program **program, int argc, const char **argv)
 	obj->time = ft_gettime();
 	
 	pthread_mutex_init(&obj->can_write, NULL);
-	pthread_mutex_init(&obj->can_eat, NULL);
+	pthread_mutex_init(&obj->startup_lock, NULL);
 	*program = obj;
 }
 
@@ -85,12 +83,12 @@ int	main(void)
 {
 	int ac = 6;
 	const char	*av[6] = { "./philosophers",
-		"5",
+		"4",
 		"310", //Time to die
 		"100", //Time to sleep
 		"100", //Time to eat
 		"5"}; //Optional: times to eat
-	
+
 	t_program		*program;
 	t_philosopher	**philosophers;
 	size_t			i;
@@ -126,14 +124,31 @@ int	main(void)
 			i++;
 		}
 	}
+
+	//Thread Initilizatoin
+	{
+		pthread_mutex_lock(&program->startup_lock);
+		i = 0;
+		while (i < program->nb_of_philos)
+		{
+			pthread_create(&philosophers[i]->thread_id,
+				NULL,
+				routine,
+				philosophers[i]);
+			i++;
+		}
+		pthread_mutex_unlock(&program->startup_lock);
+	}
 	
 	//Redo initiailizaition
-
-	i = 0;
-	while (i < program->nb_of_philos)
 	{
-		pthread_join(philosophers[i]->thread_id, NULL);
-		i++;
+		i = 0;
+		while (i < program->nb_of_philos)
+		{
+			pthread_mutex_unlock(&philosophers[i]->lock);
+			pthread_join(philosophers[i]->thread_id, NULL);
+			i++;
+		}
 	}
 	return (0);
 }
