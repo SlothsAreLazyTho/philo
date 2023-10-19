@@ -50,6 +50,7 @@ typedef struct s_program
 	pthread_mutex_t	*forks;
 	pthread_mutex_t	lock;
 	pthread_mutex_t	write_lock;
+	bool			is_dead;
 	time_t			time;
 	u_int32_t		nb_of_philos;
 	u_int32_t		time_to_die;
@@ -65,9 +66,9 @@ void			*ft_calloc(int count, int size);
 int				ft_isnumber(char const *str);
 void			ft_usleep(unsigned int time);
 time_t			ft_gettime(void);
-size_t			ft_getmilliseconds(struct timeval time);
-size_t			ft_gettimediff(struct timeval start, struct timeval end);
-size_t			ft_gettimediffl(size_t start, size_t stop);
+time_t			ft_getmilliseconds(struct timeval time);
+time_t			ft_gettimediff(struct timeval start, struct timeval end);
+time_t			ft_gettimediffl(time_t start, time_t stop);
 
 //Actions
 bool			p_eat(t_philosopher *philo);
@@ -75,7 +76,7 @@ bool			p_sleep(t_philosopher *philo);
 bool			p_think(t_philosopher *philo);
 
 // Functions
-void			ft_log(t_philosopher *philo, const char *text);
+bool			ft_log(t_philosopher *philo, const char *text);
 
 // Fun bullshit
 void			loop_time(void);

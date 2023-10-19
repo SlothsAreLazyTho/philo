@@ -22,7 +22,7 @@ void	*routine(void *threadctx)
 	{
 		if (!p_think(philo))
 			return (NULL);
-		ft_usleep(philo->program->time_to_eat / 2);
+		ft_usleep(philo->program->time_to_sleep / 2);
 	}
 	while (true)
 	{
@@ -33,6 +33,7 @@ void	*routine(void *threadctx)
 		if (!p_think(philo))
 			return (NULL);
 	}
+	printf("Babey died....");
 	return (philo);
 }
 
@@ -55,9 +56,9 @@ int	main(void)
 {
 	int ac = 6;
 	const char	*av[6] = { "./philosophers",
-		"6",
+		"4",
 		"310", //Time to die
-		"100", //Time to sleep
+		"200", //Time to sleep
 		"100", //Time to eat
 		"5"}; //Optional: times to eat
 
@@ -69,11 +70,11 @@ int	main(void)
 
 	//Program initialization
 	{
-		program.nb_of_philos = atoi(av[1]);
-		program.time_to_die = atoi(av[2]);
-		program.time_to_eat = atoi(av[3]);
-		program.time_to_sleep = atoi(av[4]);
-		program.times_eat = atoi(av[5]);
+		program.nb_of_philos  = atoi(av[1]);
+		program.time_to_die   = atoi(av[2]);
+		program.time_to_sleep = atoi(av[3]);
+		program.time_to_eat   = atoi(av[4]);
+		program.times_eat	  = atoi(av[5]);
 		program.time = ft_gettime();
 		pthread_mutex_init(&program.lock, NULL);
 		pthread_mutex_init(&program.write_lock, NULL);

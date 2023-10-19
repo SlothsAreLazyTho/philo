@@ -22,17 +22,17 @@ time_t	ft_gettime(void)
 	return (time);
 }
 
-size_t	ft_gettimediff(struct timeval start, struct timeval end)
+time_t	ft_gettimediff(struct timeval start, struct timeval end)
 {
 	return (ft_getmilliseconds(start) - ft_getmilliseconds(end));
 }
 
-size_t	ft_gettimediffl(size_t start, size_t stop)
+time_t	ft_gettimediffl(time_t start, time_t stop)
 {
 	return (start - stop);
 }
 
-size_t	ft_getmilliseconds(struct timeval time)
+time_t	ft_getmilliseconds(struct timeval time)
 {
 	return ((time.tv_usec / 1000) + (time.tv_sec * 1000));
 }

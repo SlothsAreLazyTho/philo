@@ -32,27 +32,27 @@ void	drop_forks(t_philosopher *philo)
 bool	p_eat(t_philosopher *philo)
 {
 	lock_forks(philo);
-	// BEGIN -> Eating process
 	pthread_mutex_lock(&philo->lock);
-	//printf("Philo over death? %s\t%ld\n", ft_gettime() - philo->last_time_eat > 0 ? "should be ALIVE" : "Nope still DEAD", ft_gettime() - philo->last_time_eat);
-	ft_log(philo, "is eating\n");
-	ft_usleep(philo->program->time_to_eat);
+	if (!ft_log(philo, "is eating\n"))
+		return (false);
 	philo->last_time_eat = ft_gettime();
+	ft_usleep(philo->program->time_to_eat);
 	pthread_mutex_unlock(&philo->lock);
-	// END -> Eating process
 	drop_forks(philo);
 	return (true);
 }
 
 bool	p_sleep(t_philosopher *philo)
 {
-	ft_log(philo, "is sleeping\n");
+	if (!ft_log(philo, "is sleeping\n"))
+		return (false);
 	ft_usleep(philo->program->time_to_sleep);
 	return (true);
 }
 
 bool	p_think(t_philosopher *philo)
 {
-	ft_log(philo, "is thinking\n");
+	if (!ft_log(philo, "is thinking\n"))
+		return (false);
 	return (true);
 }
