@@ -6,7 +6,7 @@
 /*   By: cbijman <cbijman@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/05/31 18:02:05 by cbijman       #+#    #+#                 */
-/*   Updated: 2023/10/18 17:52:59 by cbijman       ########   odam.nl         */
+/*   Updated: 2023/10/23 16:44:58 by cbijman       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,12 +55,19 @@ void	*philo_new(t_program *program, int id)
 int	main(void)
 {
 	int ac = 6;
+	const char	*aav[6] = { "./philosophers",
+		"4",
+		"200", //Time to die
+		"205", //Time to sleep
+		"200", //Time to eat
+		"5"}; //Optional: times to eat
+	
 	const char	*av[6] = { "./philosophers",
 		"4",
-		"310", //Time to die
+		"410", //Time to die
 		"200", //Time to sleep
-		"100", //Time to eat
-		"5"}; //Optional: times to eat
+		"200", //Time to eat
+		"10"}; //Optional: times to eat
 
 	t_program		program;
 	t_philosopher	**philosophers;

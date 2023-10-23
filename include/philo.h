@@ -6,7 +6,7 @@
 /*   By: cbijman <marvin@codam.nl>                    +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/05/22 18:27:29 by cbijman       #+#    #+#                 */
-/*   Updated: 2023/10/18 17:31:05 by cbijman       ########   odam.nl         */
+/*   Updated: 2023/10/23 12:14:51 by cbijman       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,23 +62,24 @@ typedef struct s_program
 typedef void (*t_philofunc)(t_philosopher *philo);
 
 //Libft funcs
-void			*ft_calloc(int count, int size);
-int				ft_isnumber(char const *str);
-void			ft_usleep(unsigned int time);
-time_t			ft_gettime(void);
-time_t			ft_getmilliseconds(struct timeval time);
-time_t			ft_gettimediff(struct timeval start, struct timeval end);
-time_t			ft_gettimediffl(time_t start, time_t stop);
+void	*ft_calloc(int count, int size);
+int		ft_isnumber(char const *str);
+void	ft_usleep(unsigned int time);
+time_t	ft_gettime(void);
+time_t	ft_getmilliseconds(struct timeval time);
+time_t	ft_gettimediff(struct timeval start, struct timeval end);
+time_t	ft_gettimediffl(time_t start, time_t stop);
+time_t	ft_gettimewdiff(time_t diff);
 
 //Actions
-bool			p_eat(t_philosopher *philo);
-bool			p_sleep(t_philosopher *philo);
-bool			p_think(t_philosopher *philo);
+bool	p_eat(t_philosopher *philo);
+bool	p_sleep(t_philosopher *philo);
+bool	p_think(t_philosopher *philo);
 
 // Functions
-bool			ft_log(t_philosopher *philo, const char *text);
+bool	ft_log(t_philosopher *philo, const char *text);
 
 // Fun bullshit
-void			loop_time(void);
+void	loop_time(void);
 
 #endif

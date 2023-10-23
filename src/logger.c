@@ -6,7 +6,7 @@
 /*   By: cbijman <cbijman@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/06/07 17:55:17 by cbijman       #+#    #+#                 */
-/*   Updated: 2023/10/18 17:46:11 by cbijman       ########   odam.nl         */
+/*   Updated: 2023/10/23 16:43:22 by cbijman       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,13 +17,16 @@
 /// @param text whatever you want it to be buddy.
 bool	ft_log(t_philosopher *philo, const char *text)
 {
+	time_t	time;
+
 	pthread_mutex_lock(&philo->program->write_lock);
-	if (ft_gettimediffl(ft_gettime(), philo->last_time_eat) > philo->program->time_to_die)
+	time = ft_gettime() - philo->program->time;
+	if (ft_gettimewdiff(philo->last_time_eat) > philo->program->time_to_die)
 	{
-		printf("Philo %d died.", philo->id);
-		return (false);
+		printf("%ld %d died\n", time, philo->id);
+		return (pthread_mutex_unlock(&philo->program->write_lock), false);
 	}
-	printf("%ld %d %s", ft_gettime() - philo->program->time, philo->id, text);
+	printf("%ld %d %s", time, philo->id, text);
 	pthread_mutex_unlock(&philo->program->write_lock);
 	return (true);
 }
