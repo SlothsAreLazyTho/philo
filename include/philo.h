@@ -6,7 +6,7 @@
 /*   By: cbijman <marvin@codam.nl>                    +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/05/22 18:27:29 by cbijman       #+#    #+#                 */
-/*   Updated: 2023/10/23 12:14:51 by cbijman       ########   odam.nl         */
+/*   Updated: 2023/10/25 15:33:55 by cbijman       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ typedef enum e_philo_action
 	DEAD,
 }	t_action;
 
-typedef struct s_program t_program;
+typedef struct s_program	t_program;
 
 typedef struct s_philosopher
 {
@@ -41,7 +41,7 @@ typedef struct s_philosopher
 	t_fork_id		left_fork;
 	t_fork_id		right_fork;
 	pthread_mutex_t	lock;
-	u_int64_t		last_time_eat;
+	time_t			last_time_eat;
 	t_program		*program;
 }	t_philosopher;
 
@@ -59,7 +59,7 @@ typedef struct s_program
 	u_int32_t		times_eat;
 }	t_program;
 
-typedef void (*t_philofunc)(t_philosopher *philo);
+typedef void	(*t_philofunc)(t_philosopher *philo);
 
 //Libft funcs
 void	*ft_calloc(int count, int size);
