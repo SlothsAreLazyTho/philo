@@ -6,7 +6,7 @@
 /*   By: cbijman <marvin@codam.nl>                    +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/05/22 18:27:29 by cbijman       #+#    #+#                 */
-/*   Updated: 2023/10/25 15:33:55 by cbijman       ########   odam.nl         */
+/*   Updated: 2023/10/30 14:00:40 by cbijman       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,10 +38,11 @@ typedef struct s_philosopher
 {
 	u_int32_t		id;
 	pthread_t		thread_id;
+	int				times_eat;
 	t_fork_id		left_fork;
 	t_fork_id		right_fork;
-	pthread_mutex_t	lock;
 	time_t			last_time_eat;
+	pthread_mutex_t	lock;
 	t_program		*program;
 }	t_philosopher;
 
@@ -50,6 +51,7 @@ typedef struct s_program
 	pthread_mutex_t	*forks;
 	pthread_mutex_t	lock;
 	pthread_mutex_t	write_lock;
+	pthread_mutex_t	dead_lock;
 	bool			is_dead;
 	time_t			time;
 	u_int32_t		nb_of_philos;
@@ -78,6 +80,7 @@ bool	p_think(t_philosopher *philo);
 
 // Functions
 bool	ft_log(t_philosopher *philo, const char *text);
+bool	is_philo_dood(t_philosopher *philo);
 
 // Fun bullshit
 void	loop_time(void);

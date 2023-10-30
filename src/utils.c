@@ -1,16 +1,46 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   ft_calloc.c                                        :+:    :+:            */
+/*   utils.c                                            :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: cbijman <cbijman@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2023/09/19 16:29:45 by cbijman       #+#    #+#                 */
-/*   Updated: 2023/10/18 15:10:43 by cbijman       ########   odam.nl         */
+/*   Created: 2023/10/30 12:40:30 by cbijman       #+#    #+#                 */
+/*   Updated: 2023/10/30 13:45:06 by cbijman       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/philo.h"
+#include "philo.h"
+
+void	ft_usleep(unsigned int time)
+{
+	const time_t	start = ft_gettime();
+	time_t			ms;
+
+	ms = 0;
+	while ((ft_gettime() - start) < time)
+		usleep(200);
+}
+
+int	ft_isnumber(char const *str)
+{
+	int		i;
+
+	i = 0;
+	if (!str)
+		return (0);
+	if (str[i] == '+')
+		i++;
+	if (str[i] == '\0')
+		return (0);
+	while (str[i])
+	{
+		if (str[i] < '0' || str[i] > '9')
+			return (0);
+		i++;
+	}
+	return (1);
+}
 
 void	*ft_calloc(int count, int size)
 {
@@ -22,3 +52,4 @@ void	*ft_calloc(int count, int size)
 	memset(content, 0, size);
 	return (content);
 }
+

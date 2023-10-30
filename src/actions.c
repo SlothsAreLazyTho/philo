@@ -6,7 +6,7 @@
 /*   By: cbijman <cbijman@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/05/22 18:46:53 by cbijman       #+#    #+#                 */
-/*   Updated: 2023/10/25 15:31:10 by cbijman       ########   odam.nl         */
+/*   Updated: 2023/10/30 13:59:53 by cbijman       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,13 +37,13 @@ void	drop_forks(t_philosopher *philo)
 {
 	if (philo->id % 2 == 0)
 	{
-		pthread_mutex_unlock(&philo->program->forks[philo->right_fork]);
 		pthread_mutex_unlock(&philo->program->forks[philo->left_fork]);
+		pthread_mutex_unlock(&philo->program->forks[philo->right_fork]);
 	}
 	else if (philo->id % 2 == 1)
 	{
-		pthread_mutex_unlock(&philo->program->forks[philo->left_fork]);
 		pthread_mutex_unlock(&philo->program->forks[philo->right_fork]);
+		pthread_mutex_unlock(&philo->program->forks[philo->left_fork]);
 	}
 }
 
@@ -53,8 +53,15 @@ bool	p_eat(t_philosopher *philo)
 	pthread_mutex_lock(&philo->lock);
 	philo->last_time_eat = ft_gettime();
 	pthread_mutex_unlock(&philo->lock);
+	if (philo_is_dood(philo))
+	{
+		return (false);
+	}
 	if (!ft_log(philo, "is eating\n"))
 		return (false);
+	pthread_mutex_lock(&philo->lock);
+	philo->times_eat++;
+	pthread_mutex_unlock(&philo->lock);
 	ft_usleep(philo->program->time_to_eat);
 	drop_forks(philo);
 	return (true);

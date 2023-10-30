@@ -6,7 +6,7 @@
 /*   By: cbijman <cbijman@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/05/31 18:02:05 by cbijman       #+#    #+#                 */
-/*   Updated: 2023/10/25 15:59:17 by cbijman       ########   odam.nl         */
+/*   Updated: 2023/10/30 13:44:09 by cbijman       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ void	*routine(void *threadctx)
 	{
 		if (!p_think(philo))
 			return (NULL);
-		ft_usleep(philo->program->time_to_sleep / 2);
+		ft_usleep(philo->program->time_to_eat / 2);
 	}
 	while (true)
 	{
@@ -33,7 +33,6 @@ void	*routine(void *threadctx)
 		if (!p_think(philo))
 			return (NULL);
 	}
-	printf("Babey died....");
 	return (philo);
 }
 
@@ -44,7 +43,7 @@ void	*philo_new(t_program *program, int id)
 	philo = malloc(sizeof(t_philosopher));
 	if (!philo)
 		return (NULL);
-	philo->id = id;
+	philo->id = (id + 1);
 	philo->program = program;
 	philo->left_fork = id;
 	philo->right_fork = (id + 1) % program->nb_of_philos;
@@ -55,14 +54,14 @@ void	*philo_new(t_program *program, int id)
 int	main(void)
 {
 	int ac = 6;
-	const char	*av[6] = { "./philosophers",
+	const char	*aav[6] = { "./philosophers",
 		"5",
 		"200", //Time to die
 		"205", //Time to sleep
 		"200", //Time to eat
 		"5"}; //Optional: times to eat
 	
-	const char	*aav[6] = { "./philosophers",
+	const char	*av[6] = { "./philosophers",
 		"5",
 		"310", //Time to die
 		"200", //Time to sleep
@@ -85,6 +84,7 @@ int	main(void)
 		program.time = ft_gettime();
 		pthread_mutex_init(&program.lock, NULL);
 		pthread_mutex_init(&program.write_lock, NULL);
+		pthread_mutex_init(&program.dead_lock, NULL);
 	}
 
 	//Allocation
@@ -141,5 +141,5 @@ int	main(void)
 			i++;
 		}
 	}
-	return (0);
+	return (printf("Bye!\n"), 0);
 }
