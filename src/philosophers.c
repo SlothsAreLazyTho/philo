@@ -6,7 +6,7 @@
 /*   By: cbijman <cbijman@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/05/31 18:02:05 by cbijman       #+#    #+#                 */
-/*   Updated: 2023/10/31 13:29:39 by cbijman       ########   odam.nl         */
+/*   Updated: 2023/10/31 15:19:25 by cbijman       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,9 +15,9 @@
 bool	is_philo_dood(t_philosopher *philo)
 {
 	pthread_mutex_lock(&philo->program->dead_lock);
-	if (ft_gettimewdiff(philo->last_time_eat) > philo->program->time_to_die)
+	if (philo->program->is_dead == true)
 	{
-		printf("%ld %d died\n", 100L, philo->id);
+		//
 		return (pthread_mutex_unlock(&philo->program->dead_lock), true);
 	}
 	return (pthread_mutex_unlock(&philo->program->dead_lock), false);
@@ -60,9 +60,9 @@ void	*philo_new(t_program *program, int id)
 	return (philo);
 }
 
-int	main(void)
+int	main(int ac, char **av)
 {
-	int ac = 6;
+	//int ac = 6;
 	const char	*aav[6] = { "./philosophers",
 		"5",
 		"200", //Time to die
@@ -70,7 +70,7 @@ int	main(void)
 		"200", //Time to eat
 		"5"}; //Optional: times to eat
 	
-	const char	*av[6] = { "./philosophers",
+	const char	*aaav[6] = { "./philosophers",
 		"5",
 		"310", //Time to die
 		"200", //Time to sleep
@@ -78,7 +78,7 @@ int	main(void)
 		"5"}; //Optional: times to eat
 
 	t_program		program;
-	t_philosopher	**philosophers;
+	t_philosopher	**philo;
 	size_t			i;
 
 	memset(&program, 0, sizeof(t_program));
@@ -89,7 +89,8 @@ int	main(void)
 		program.time_to_die   = atoi(av[2]);
 		program.time_to_sleep = atoi(av[3]);
 		program.time_to_eat   = atoi(av[4]);
-		program.times_eat	  = atoi(av[5]);
+		if (ac == 6)
+			program.times_eat	  = atoi(av[5]);
 		program.is_dead		  = false;
 		program.time = ft_gettime();
 		pthread_mutex_init(&program.lock, NULL);
@@ -100,7 +101,7 @@ int	main(void)
 	//Allocation
 	{
 		program.forks = malloc(program.nb_of_philos * sizeof(pthread_mutex_t));
-		philosophers = malloc(program.nb_of_philos * sizeof(t_philosopher));
+		philo = malloc(program.nb_of_philos * sizeof(t_philosopher));
 	}
 
 	//Forks initilization
@@ -114,13 +115,13 @@ int	main(void)
 		}
 	}
 
-	//Philosophers Initialization
+	//philo Initialization
 	{
 		i = 0;
 		while (i < program.nb_of_philos)
 		{
-			philosophers[i] = philo_new(&program, i);
-			if (!philosophers[i])
+			philo[i] = philo_new(&program, i);
+			if (!philo[i])
 				return (printf("Error creating philosopher exiting...\n"), 0);
 			i++;
 		}
@@ -132,11 +133,11 @@ int	main(void)
 		i = 0;
 		while (i < program.nb_of_philos)
 		{
-			philosophers[i]->last_time_eat = ft_gettime();
-			pthread_create(&philosophers[i]->thread_id,
+			philo[i]->last_time_eat = ft_gettime();
+			pthread_create(&philo[i]->thread_id,
 				NULL,
 				routine,
-				philosophers[i]);
+				philo[i]);
 			i++;
 		}
 		pthread_mutex_unlock(&program.lock);
@@ -147,19 +148,28 @@ int	main(void)
 		while (!program.is_dead)
 		{
 			i = 0;
+			if (philo_has_eaten(philo))
+			{
+				pthread_mutex_lock(&program.dead_lock);
+				program.is_dead = true;
+				pthread_mutex_unlock(&program.dead_lock);
+				break ;
+			}
 			while (i < program.nb_of_philos)
 			{
-				pthread_mutex_lock(&philosophers[i]->lock);
-				if (philosophers[i]->times_eat == program.times_eat)
+				pthread_mutex_lock(&philo[i]->lock);
+				if (ft_gettimewdiff(philo[i]->last_time_eat) > program.time_to_die)
 				{
-					printf("OOOPS\n");
+					pthread_mutex_unlock(&philo[i]->lock);
 					pthread_mutex_lock(&program.dead_lock);
 					program.is_dead = true;
 					pthread_mutex_unlock(&program.dead_lock);
+					printf("%ld %d died\n", ft_gettimewdiff(program.time), philo[i]->id);
 				}
-				pthread_mutex_unlock(&philosophers[i]->lock);
+				pthread_mutex_unlock(&philo[i]->lock);
 				i++;
 			}
+			usleep(1000);
 		}
 	}
 
@@ -168,7 +178,7 @@ int	main(void)
 		i = 0;
 		while (i < program.nb_of_philos)
 		{
-			pthread_join(philosophers[i]->thread_id, NULL);
+			pthread_join(philo[i]->thread_id, NULL);
 			i++;
 		}
 	}
