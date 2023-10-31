@@ -6,7 +6,7 @@
 /*   By: cbijman <cbijman@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/10/30 12:40:30 by cbijman       #+#    #+#                 */
-/*   Updated: 2023/10/30 13:45:06 by cbijman       ########   odam.nl         */
+/*   Updated: 2023/10/31 13:06:18 by cbijman       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ void	ft_usleep(unsigned int time)
 
 	ms = 0;
 	while ((ft_gettime() - start) < time)
-		usleep(200);
+		usleep(150);
 }
 
 int	ft_isnumber(char const *str)
@@ -52,4 +52,3 @@ void	*ft_calloc(int count, int size)
 	memset(content, 0, size);
 	return (content);
 }
-

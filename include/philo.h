@@ -6,7 +6,7 @@
 /*   By: cbijman <marvin@codam.nl>                    +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/05/22 18:27:29 by cbijman       #+#    #+#                 */
-/*   Updated: 2023/10/30 14:00:40 by cbijman       ########   odam.nl         */
+/*   Updated: 2023/10/30 15:39:16 by cbijman       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,6 @@ bool	p_think(t_philosopher *philo);
 
 // Functions
 bool	ft_log(t_philosopher *philo, const char *text);
-bool	is_philo_dood(t_philosopher *philo);
 
 // Fun bullshit
 void	loop_time(void);
