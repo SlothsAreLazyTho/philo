@@ -6,7 +6,7 @@
 /*   By: cbijman <marvin@codam.nl>                    +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/05/22 18:27:29 by cbijman       #+#    #+#                 */
-/*   Updated: 2023/10/30 15:39:16 by cbijman       ########   odam.nl         */
+/*   Updated: 2023/11/01 15:09:28 by cbijman       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,14 @@
 # include <sys/time.h>
 # include <sys/types.h>
 
+# define IS_EATING "is eating"
+# define IS_SLEEPING "is sleeping"
+# define IS_THINKING "is thinking"
+# define IS_DEAD "is dead"
+# define TAKES_A_FORK "has taken a fork"
+
+
+
 typedef int	t_fork_id;
 
 typedef enum e_philo_action
@@ -36,7 +44,7 @@ typedef struct s_program	t_program;
 
 typedef struct s_philosopher
 {
-	u_int32_t		id;
+	int		id;
 	pthread_t		thread_id;
 	int				times_eat;
 	t_fork_id		left_fork;
@@ -54,11 +62,11 @@ typedef struct s_program
 	pthread_mutex_t	dead_lock;
 	bool			is_dead;
 	time_t			time;
-	u_int32_t		nb_of_philos;
-	u_int32_t		time_to_die;
-	u_int32_t		time_to_eat;
-	u_int32_t		time_to_sleep;
-	u_int32_t		times_eat;
+	int		nb_of_philos;
+	int		time_to_die;
+	int		time_to_eat;
+	int		time_to_sleep;
+	int		times_eat;
 }	t_program;
 
 typedef void	(*t_philofunc)(t_philosopher *philo);
@@ -76,10 +84,12 @@ time_t	ft_gettimewdiff(time_t diff);
 //Actions
 bool	p_eat(t_philosopher *philo);
 bool	p_sleep(t_philosopher *philo);
-bool	p_think(t_philosopher *philo);
 
 // Functions
-bool	ft_log(t_philosopher *philo, const char *text);
+bool	ft_log(t_philosopher *philo, const char *text, bool check_death);
+
+bool	did_everyone_eat(t_philosopher **philo);
+bool	did_anyone_die(t_philosopher *philo);
 
 // Fun bullshit
 void	loop_time(void);
