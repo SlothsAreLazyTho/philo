@@ -6,7 +6,7 @@
 /*   By: cbijman <cbijman@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/05/22 18:46:53 by cbijman       #+#    #+#                 */
-/*   Updated: 2023/11/01 15:12:03 by cbijman       ########   odam.nl         */
+/*   Updated: 2023/11/02 11:18:54 by cbijman       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,8 @@
 
 void	drop_forks(t_philosopher *philo)
 {
-	pthread_mutex_unlock(&philo->program->forks[philo->left_fork]);
 	pthread_mutex_unlock(&philo->program->forks[philo->right_fork]);
+	pthread_mutex_unlock(&philo->program->forks[philo->left_fork]);
 }
 
 void	lock_forks(t_philosopher *philo)
