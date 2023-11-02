@@ -6,7 +6,7 @@
 /*   By: cbijman <cbijman@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/10/30 12:40:30 by cbijman       #+#    #+#                 */
-/*   Updated: 2023/11/02 13:17:10 by cbijman       ########   odam.nl         */
+/*   Updated: 2023/11/02 13:29:38 by cbijman       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,6 @@ bool	ft_isnumber(char const *str)
 {
 	int		i;
 
-	printf("Checking number: %s\n", str);
 	i = 0;
 	if (!str)
 		return (0);

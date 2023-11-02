@@ -6,7 +6,7 @@
 /*   By: cbijman <marvin@codam.nl>                    +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/05/22 18:27:29 by cbijman       #+#    #+#                 */
-/*   Updated: 2023/11/02 13:21:40 by cbijman       ########   odam.nl         */
+/*   Updated: 2023/11/02 14:05:56 by cbijman       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@
 # define IS_EATING "is eating"
 # define IS_SLEEPING "is sleeping"
 # define IS_THINKING "is thinking"
-# define IS_DEAD "is dead"
+# define IS_DEAD "died"
 # define TAKES_A_FORK "has taken a fork"
 
 # define ERR_NO_FORK "Error while creating forks"
