@@ -6,7 +6,7 @@
 /*   By: cbijman <marvin@codam.nl>                    +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/05/22 18:27:29 by cbijman       #+#    #+#                 */
-/*   Updated: 2023/11/02 14:05:56 by cbijman       ########   odam.nl         */
+/*   Updated: 2023/11/02 14:27:28 by cbijman       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@
 # define ERR_NO_FORK "Error while creating forks"
 # define ERR_NO_PHILO "Error while creating philos"
 # define ERR_NOT_ENOUGH_MEMORY "Not enough memory for allocation"
-# define ERR_NOT_ENOUGH_ARGS "Not enough arguments provided"
+# define ERR_NOT_ENOUGH_ARGS "Nor valid or enough arguments provided"
 
 typedef enum e_philo_action
 {
