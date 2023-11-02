@@ -6,7 +6,7 @@
 /*   By: cbijman <cbijman@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/11/02 12:51:16 by cbijman       #+#    #+#                 */
-/*   Updated: 2023/11/02 13:19:32 by cbijman       ########   odam.nl         */
+/*   Updated: 2023/11/02 13:23:00 by cbijman       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ bool	is_valid_params(int ac, char **av)
 {
 	long	tmp;
 	int		index;
-	
+
 	if (ac < 5)
 		return (false);
 	index = 1;
