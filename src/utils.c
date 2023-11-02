@@ -6,7 +6,7 @@
 /*   By: cbijman <cbijman@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/10/30 12:40:30 by cbijman       #+#    #+#                 */
-/*   Updated: 2023/11/02 12:35:29 by cbijman       ########   odam.nl         */
+/*   Updated: 2023/11/02 13:17:10 by cbijman       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,10 +22,11 @@ void	ft_usleep(unsigned int time)
 		usleep(150);
 }
 
-int	ft_isnumber(char const *str)
+bool	ft_isnumber(char const *str)
 {
 	int		i;
 
+	printf("Checking number: %s\n", str);
 	i = 0;
 	if (!str)
 		return (0);
@@ -42,40 +43,64 @@ int	ft_isnumber(char const *str)
 	return (1);
 }
 
+int	ft_strncmp(const char *s1, const char *s2, size_t n)
+{
+	int	i;
+
+	i = 0;
+	while (n--)
+	{
+		if (s1[i] != s2[i] || s1[i] == '\0' || s2[i] == '\0')
+			return (((unsigned char *)s1)[i] - ((unsigned char *)s2)[i]);
+		i++;
+	}
+	return (0);
+}
+
 long	ft_atol(const char *str)
 {
-	long long	n;
-	int			i;
-	int			multi;
+	long	n;
+	int		i;
+	int		multi;
 
 	if (!str)
 		return (0L);
 	i = 0;
 	n = 0;
 	multi = 1;
-	while (str[i] == '\t' || str[i] == '\n' || str[i] == '\v' \
-		|| str[i] == '\r' || str[i] == '\f' || str[i] == ' ')
+	while (str[i] <= 32 || str[i] >= 127)
 		i++;
-	if (str[i] == '-')
+	if (str[i] == '-' || str[i] == '+')
 	{
-		multi *= -1;
-		i += 1;
-	}
-	while (str[i] >= '0' || str[i] <= '9')
-	{
-		n = (n * 10) + (str[i] - '0');
+		if (str[i] == '-')
+			multi = -multi;
 		i++;
 	}
+	while (str[i] && (str[i] >= '0' || str[i] <= '9'))
+		n = (n * 10) + (str[i++] - '0');
 	return (n * multi);
 }
 
-void	*ft_calloc(int count, int size)
+int32_t	ft_atoi(const char *str)
 {
-	void	*content;
+	int		i;
+	int		multi;
+	long	answer;
 
-	content = malloc(count * size);
-	if (!content)
-		return (NULL);
-	memset(content, 0, size);
-	return (content);
+	i = 0;
+	multi = 1;
+	answer = 0;
+	if (ft_strncmp(str, "-2147483648", 11) == 0)
+		return (-2147483648);
+	while (str[i] <= 32 || str[i] == 127)
+		i++;
+	if (str[i] == '-' || str[i] == '+')
+	{
+		if (str[i] == '-')
+			multi = -multi;
+		i++;
+	}
+	while (str[i] && (str[i] >= '0' || str[i] <= '9'))
+		answer = (answer * 10) + (str[i++] - '0');
+	return (answer * multi);
 }

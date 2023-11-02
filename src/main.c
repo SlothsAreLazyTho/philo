@@ -6,7 +6,7 @@
 /*   By: cbijman <cbijman@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/05/31 18:02:05 by cbijman       #+#    #+#                 */
-/*   Updated: 2023/11/02 12:33:30 by cbijman       ########   odam.nl         */
+/*   Updated: 2023/11/02 13:20:52 by cbijman       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ int	main(int ac, char **av)
 	t_program		program;
 
 	memset(&program, 0, sizeof(program));
-	if (ac < 5)
+	if (!is_valid_params(ac, av))
 	{
 		return (printf(ERR_NOT_ENOUGH_ARGS), EXIT_FAILURE);
 	}

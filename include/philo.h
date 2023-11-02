@@ -6,7 +6,7 @@
 /*   By: cbijman <marvin@codam.nl>                    +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/05/22 18:27:29 by cbijman       #+#    #+#                 */
-/*   Updated: 2023/11/02 12:32:21 by cbijman       ########   odam.nl         */
+/*   Updated: 2023/11/02 13:21:40 by cbijman       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,16 +70,8 @@ typedef struct s_program
 	int32_t			times_eat;
 }	t_program;
 
-//Libft funcs
-void			*ft_calloc(int count, int size);
-int				ft_isnumber(char const *str);
-void			ft_usleep(unsigned int time);
-long			ft_atol(const char *str);
-time_t			ft_gettime(void);
-time_t			ft_getmilliseconds(struct timeval time);
-time_t			ft_gettimediff(struct timeval start, struct timeval end);
-time_t			ft_gettimediffl(time_t start, time_t stop);
-time_t			ft_gettimewdiff(time_t diff);
+// Program functions
+bool			is_valid_params(int ac, char **av);
 
 // Initialization
 bool			initialize_program(int ac, char **av, t_program *program);
@@ -102,5 +94,16 @@ void			cleanup_program(t_program *program);
 void			cleanup_philos(t_philosopher **philos);
 void			cleanup_forks(t_program *program);
 void			cleanup(t_program *program, t_philosopher **philos);
+
+// Utils
+void			ft_usleep(unsigned int time);
+long			ft_atol(const char *str);
+int32_t			ft_atoi(const char *str);
+bool			ft_isnumber(char const *str);
+time_t			ft_gettime(void);
+time_t			ft_getmilliseconds(struct timeval time);
+time_t			ft_gettimediff(struct timeval start, struct timeval end);
+time_t			ft_gettimediffl(time_t start, time_t stop);
+time_t			ft_gettimewdiff(time_t diff);
 
 #endif

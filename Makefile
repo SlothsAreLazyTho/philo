@@ -6,12 +6,12 @@
 #    By: cbijman <cbijman@student.codam.nl>           +#+                      #
 #                                                    +#+                       #
 #    Created: 2023/05/22 18:31:30 by cbijman       #+#    #+#                  #
-#    Updated: 2023/11/01 15:14:19 by cbijman       ########   odam.nl          #
+#    Updated: 2023/11/02 13:02:17 by cbijman       ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
 CC = clang
-CFLAGS = -g -Wall -Wextra -Werror -fsanitize=address
+CFLAGS =  -g -fsanitize=address #-Wall -Wextra -Werror
 NAME = philosophers
 
 #Folders

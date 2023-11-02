@@ -6,12 +6,11 @@
 /*   By: cbijman <cbijman@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/11/02 11:32:41 by cbijman       #+#    #+#                 */
-/*   Updated: 2023/11/02 12:38:26 by cbijman       ########   odam.nl         */
+/*   Updated: 2023/11/02 13:21:16 by cbijman       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
-#include <stddef.h>
 
 static void	*routine(void *threadctx)
 {
@@ -91,15 +90,15 @@ t_philosopher	**initialize_philosophers(t_program *program)
 
 bool	initialize_program(int ac, char **av, t_program *program)
 {
-	program->nb_of_philos = atoi(av[1]);
-	program->time_to_die = atoi(av[2]);
-	program->time_to_eat = atoi(av[3]);
-	program->time_to_sleep = atoi(av[4]);
+	program->nb_of_philos = ft_atoi(av[1]);
+	program->time_to_die = ft_atoi(av[2]);
+	program->time_to_eat = ft_atoi(av[3]);
+	program->time_to_sleep = ft_atoi(av[4]);
 	if (ac == 6)
-		program->times_eat = atoi(av[5]);
+		program->times_eat = ft_atoi(av[5]);
 	program->is_dead = false;
 	program->time = ft_gettime();
-	program->forks = ft_calloc(program->nb_of_philos, sizeof(pthread_mutex_t));
+	program->forks = malloc(program->nb_of_philos * sizeof(pthread_mutex_t));
 	if (!program->forks)
 		return (false);
 	if (program->times_eat > INT32_MAX)
