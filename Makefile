@@ -6,43 +6,59 @@
 #    By: cbijman <cbijman@student.codam.nl>           +#+                      #
 #                                                    +#+                       #
 #    Created: 2023/05/22 18:31:30 by cbijman       #+#    #+#                  #
-#    Updated: 2023/11/02 13:02:17 by cbijman       ########   odam.nl          #
+#    Updated: 2023/11/02 13:26:36 by cbijman       ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
-CC = clang
-CFLAGS =  -g -fsanitize=address #-Wall -Wextra -Werror
+#Variables
 NAME = philosophers
+CC = clang
+RM = rm -rf
+
+#Colours
+RESET = \033[0m
+RED = \033[31;01m
+GREEN = \033[0;92m
 
 #Folders
-OBJ_FOLDER=bin
+BIN := bin
+INCLUDE = include
+FOLDER = src
 
-#Files
-HEADER= ./include/philo.h
-SRC=$(shell find ./src -type f -name "*.c")
-OBJ=${SRC:./src/%.c=$(OBJ_FOLDER)/%.o}
+#Source files
+HEADERS = $(INCLUDE)/philo.h
+FILES = actions.c cleanup.c init.c logger.c main.c time_utils.c utils.c validate.c
 
+#Source
+SRC = ${addprefix $(FOLDER)/, $(FILES)}
+OBJ = ${SRC:$(FOLDER)/%.c=$(BIN)/%.o}
+
+# Compiler settings
+CFLAGS = -Wall -Wextra -Werror
+IFLAG = -I$(INCLUDE)
+
+# Operations.
 all: $(NAME)
 
-$(OBJ_FOLDER)/%.o: ./src/%.c | bin
-	$(CC) $(CFLAGS) -I./include -c $< -o $@
+$(BIN)/%.o: $(FOLDER)/%.c | $(BIN)
+	@$(CC) $(CFLAGS) $(IFLAG) -c $< -o $@
+	@echo "$(GREEN)Compiling: $(RESET)$(notdir $<)"
 
-$(NAME): $(OBJ) $(HEADER)
-	$(CC) $(CFLAGS) $(OBJ) -I./include -o $(NAME)
+$(NAME): $(OBJ) $(HEADERS) 
+	@$(CC) $(CFLAGS) $(OBJ) $(IFLAG) -o $(NAME)
+	@echo "$(GREEN)Compiling: $(RESET)$(NAME)"
 
-debug: clean $(OBJ)
-	$(CC) -g -fsanitize=thread $(OBJ) -I./include -o $(NAME)
-	#valgrind --track-origins=yes --leak-check=full --show-leak-kinds=all ./$(NAME)
-
-bin:
-	mkdir -p $(OBJ_FOLDER)
+$(BIN):
+	@mkdir $(BIN)
 
 clean:
-	rm -rf $(OBJ_FOLDER)
+	@$(RM) $(OBJ) $(BIN)
+	@echo "$(RED)Cleaning!$(RESET)"
 
-fclean:
-	rm -rf $(NAME) $(OBJ_FOLDER)
+fclean: clean
+	@$(RM) $(NAME)
+	@echo "$(RED)Cleaning!$(RESET)"
 
 re: fclean all
 
-.PHONY: default all debug clean fclean re
+.PHONY: all clean fclean re
