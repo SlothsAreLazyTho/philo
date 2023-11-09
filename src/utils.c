@@ -6,7 +6,7 @@
 /*   By: cbijman <cbijman@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/10/30 12:40:30 by cbijman       #+#    #+#                 */
-/*   Updated: 2023/11/02 13:29:38 by cbijman       ########   odam.nl         */
+/*   Updated: 2023/11/09 13:11:40 by cbijman       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,11 @@ long	ft_atol(const char *str)
 		i++;
 	}
 	while (str[i] && (str[i] >= '0' || str[i] <= '9'))
+	{
+		if (i > 10)
+			return (-1);
 		n = (n * 10) + (str[i++] - '0');
+	}
 	return (n * multi);
 }
 

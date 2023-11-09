@@ -6,7 +6,7 @@
 /*   By: cbijman <marvin@codam.nl>                    +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/05/22 18:27:29 by cbijman       #+#    #+#                 */
-/*   Updated: 2023/11/02 14:27:28 by cbijman       ########   odam.nl         */
+/*   Updated: 2023/11/09 15:18:27 by cbijman       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,15 +31,10 @@
 # define ERR_NO_FORK "Error while creating forks"
 # define ERR_NO_PHILO "Error while creating philos"
 # define ERR_NOT_ENOUGH_MEMORY "Not enough memory for allocation"
-# define ERR_NOT_ENOUGH_ARGS "Nor valid or enough arguments provided"
+# define ERR_NOT_ENOUGH_ARGS "Not valid nor enough arguments provided"
+# define ERR_W_THREADS "Error while creating threads"
 
-typedef enum e_philo_action
-{
-	SLEEPING,
-	EATING,
-	THINKING,
-	DEAD,
-}	t_action;
+# define MAX_THREADS 2047
 
 typedef struct s_program	t_program;
 
@@ -77,6 +72,8 @@ bool			is_valid_params(int ac, char **av);
 bool			initialize_program(int ac, char **av, t_program *program);
 bool			initialize_forks(t_program *program);
 t_philosopher	**initialize_philosophers(t_program *program);
+bool			initialize_threads(t_program *program,
+					t_philosopher **philos, void *(*routine)(void *));
 
 // Actions
 bool			p_eat(t_philosopher *philo);
@@ -93,6 +90,7 @@ bool			did_anyone_die(t_philosopher *philo);
 void			cleanup_program(t_program *program);
 void			cleanup_philos(t_philosopher **philos);
 void			cleanup_forks(t_program *program);
+void			cleanup_threads(t_philosopher **philos);
 void			cleanup(t_program *program, t_philosopher **philos);
 
 // Utils

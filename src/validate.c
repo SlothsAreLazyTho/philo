@@ -6,7 +6,7 @@
 /*   By: cbijman <cbijman@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/11/02 12:51:16 by cbijman       #+#    #+#                 */
-/*   Updated: 2023/11/02 13:23:00 by cbijman       ########   odam.nl         */
+/*   Updated: 2023/11/06 15:08:12 by cbijman       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 
 static bool	is_valid_int32(long a)
 {
-	if (a < 0 || a > 2147483647)
+	if (a <= 0 || a > 2147483647)
 		return (false);
 	return (true);
 }

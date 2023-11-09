@@ -6,37 +6,11 @@
 /*   By: cbijman <cbijman@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/11/02 11:32:41 by cbijman       #+#    #+#                 */
-/*   Updated: 2023/11/02 13:21:16 by cbijman       ########   odam.nl         */
+/*   Updated: 2023/11/09 15:19:08 by cbijman       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
-
-static void	*routine(void *threadctx)
-{
-	t_philosopher	*philo;
-
-	if (!threadctx)
-		return (NULL);
-	philo = (t_philosopher *) threadctx;
-	pthread_mutex_lock(&philo->program->lock);
-	pthread_mutex_unlock(&philo->program->lock);
-	if (philo->id % 2 != 0)
-	{
-		ft_log(philo, IS_THINKING, false);
-		ft_usleep(philo->program->time_to_eat / 10);
-	}
-	while (true)
-	{
-		if (!p_eat(philo))
-			return (NULL);
-		if (!p_sleep(philo))
-			return (NULL);
-		if (!ft_log(philo, IS_THINKING, true))
-			return (NULL);
-	}
-	return (philo);
-}
 
 static t_philosopher	*new_philosopher(t_program *program, int id)
 {
@@ -60,6 +34,17 @@ static t_philosopher	*new_philosopher(t_program *program, int id)
 	return (philo);
 }
 
+int	my_pthread_create(
+	pthread_t *a, const pthread_attr_t *b, void *(*c)(void *), void *d)
+{
+	static int	i = 0;
+
+	i++;
+	if (i > 2)
+		return (1);
+	return (pthread_create(a, b, c, d));
+}
+
 t_philosopher	**initialize_philosophers(t_program *program)
 {
 	t_philosopher	**philos;
@@ -69,28 +54,22 @@ t_philosopher	**initialize_philosophers(t_program *program)
 	philos = malloc(program->nb_of_philos * sizeof(t_philosopher));
 	if (!philos)
 		return (NULL);
-	pthread_mutex_lock(&program->lock);
+	memset(philos, 0, program->nb_of_philos * sizeof(t_philosopher));
 	while (i < program->nb_of_philos)
 	{
 		philos[i] = new_philosopher(program, i);
 		if (!philos[i])
-			return (NULL);
+			return (cleanup_philos(philos), NULL);
 		i++;
 	}
-	i = 0;
-	while (i < program->nb_of_philos)
-	{
-		if (pthread_create(&philos[i]->thread, NULL, routine, philos[i]) != 0)
-			return (NULL);
-		i++;
-	}
-	pthread_mutex_unlock(&program->lock);
 	return (philos);
 }
 
 bool	initialize_program(int ac, char **av, t_program *program)
 {
 	program->nb_of_philos = ft_atoi(av[1]);
+	if (program->nb_of_philos > MAX_THREADS)
+		return (false);
 	program->time_to_die = ft_atoi(av[2]);
 	program->time_to_eat = ft_atoi(av[3]);
 	program->time_to_sleep = ft_atoi(av[4]);
@@ -109,6 +88,30 @@ bool	initialize_program(int ac, char **av, t_program *program)
 		return (free(program->forks), cleanup_program(program), false);
 	if (pthread_mutex_init(&program->write_lock, NULL) != 0)
 		return (free(program->forks), cleanup_program(program), false);
+	return (true);
+}
+
+bool	initialize_threads(t_program *program,
+	t_philosopher **philos, void *(*routine)(void *))
+{
+	int	i;
+
+	if (!philos || !*philos)
+		return (false);
+	i = 0;
+	pthread_mutex_lock(&program->lock);
+	while (philos[i])
+	{
+		if (my_pthread_create(&philos[i]->thread, NULL,
+				routine, philos[i]) != 0)
+		{
+			program->is_dead = true; //Set death to true.
+			pthread_mutex_unlock(&program->lock);
+			return (false);
+		}
+		i++;
+	}
+	pthread_mutex_unlock(&program->lock);
 	return (true);
 }
 
