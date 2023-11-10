@@ -6,19 +6,19 @@
 /*   By: cbijman <cbijman@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/05/22 18:46:53 by cbijman       #+#    #+#                 */
-/*   Updated: 2023/11/10 14:05:44 by cbijman       ########   odam.nl         */
+/*   Updated: 2023/11/10 14:17:44 by cbijman       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-void	drop_forks(t_philosopher *philo)
+static void	drop_forks(t_philosopher *philo)
 {
 	pthread_mutex_unlock(&philo->program->forks[philo->right_fork]);
 	pthread_mutex_unlock(&philo->program->forks[philo->left_fork]);
 }
 
-void	lock_forks(t_philosopher *philo)
+static void	lock_forks(t_philosopher *philo)
 {
 	pthread_mutex_lock(&philo->program->forks[philo->left_fork]);
 	if (!ft_log(philo, TAKES_A_FORK, true))
