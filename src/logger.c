@@ -6,7 +6,7 @@
 /*   By: cbijman <cbijman@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/06/07 17:55:17 by cbijman       #+#    #+#                 */
-/*   Updated: 2023/11/10 13:58:55 by cbijman       ########   odam.nl         */
+/*   Updated: 2023/11/10 14:40:01 by cbijman       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 bool	did_everyone_eat(t_philosopher **philo)
 {
-	int			i;
+	int	i;
 
 	if (!(*philo))
 		return (false);

@@ -6,7 +6,7 @@
 /*   By: cbijman <marvin@codam.nl>                    +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/05/22 18:27:29 by cbijman       #+#    #+#                 */
-/*   Updated: 2023/11/10 14:14:40 by cbijman       ########   odam.nl         */
+/*   Updated: 2023/11/10 14:43:38 by cbijman       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,20 +36,6 @@
 
 # define MAX_THREADS 2047
 
-typedef struct s_program	t_program;
-
-typedef struct s_philosopher
-{
-	int32_t			id;
-	pthread_mutex_t	lock;
-	pthread_t		thread;
-	time_t			last_time_eat;
-	int32_t			times_eat;
-	int32_t			left_fork;
-	int32_t			right_fork;
-	t_program		*program;
-}	t_philosopher;
-
 typedef struct s_program
 {
 	pthread_mutex_t	*forks;
@@ -65,6 +51,18 @@ typedef struct s_program
 	int32_t			time_to_sleep;
 	int32_t			times_eat;
 }	t_program;
+
+typedef struct s_philosopher
+{
+	int32_t			id;
+	pthread_mutex_t	lock;
+	pthread_t		thread;
+	time_t			last_time_eat;
+	int32_t			times_eat;
+	int32_t			left_fork;
+	int32_t			right_fork;
+	t_program		*program;
+}	t_philosopher;
 
 // Initialization
 bool			initialize_program(int ac, char **av, t_program *program);

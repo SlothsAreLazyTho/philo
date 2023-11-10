@@ -6,7 +6,7 @@
 /*   By: cbijman <cbijman@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/11/02 11:34:20 by cbijman       #+#    #+#                 */
-/*   Updated: 2023/11/10 14:15:51 by cbijman       ########   odam.nl         */
+/*   Updated: 2023/11/10 14:50:13 by cbijman       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,11 +60,7 @@ void	cleanup_threads(t_philosopher **philos)
 		return ;
 	while (philos[i])
 	{
-		if (pthread_join(philos[i]->thread, NULL) != 0)
-		{
-			printf("Cannot join threads");
-			return ;
-		}
+		pthread_join(philos[i]->thread, NULL);
 		i++;
 	}
 }
