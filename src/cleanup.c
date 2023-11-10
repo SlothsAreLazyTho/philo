@@ -6,7 +6,7 @@
 /*   By: cbijman <cbijman@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/11/02 11:34:20 by cbijman       #+#    #+#                 */
-/*   Updated: 2023/11/09 15:14:51 by cbijman       ########   odam.nl         */
+/*   Updated: 2023/11/10 14:15:51 by cbijman       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@ void	cleanup_program(t_program *program)
 {
 	pthread_mutex_destroy(&program->dead_lock);
 	pthread_mutex_destroy(&program->write_lock);
+	pthread_mutex_destroy(&program->startup_lock);
 	pthread_mutex_destroy(&program->lock);
 }
 
@@ -23,7 +24,7 @@ void	cleanup_philos(t_philosopher **philos)
 {
 	int	i;
 
-	if (!philos || !*philos)
+	if (!philos)
 		return ;
 	i = 0;
 	while (philos[i])
@@ -59,7 +60,11 @@ void	cleanup_threads(t_philosopher **philos)
 		return ;
 	while (philos[i])
 	{
-		pthread_join(philos[i]->thread, NULL);
+		if (pthread_join(philos[i]->thread, NULL) != 0)
+		{
+			printf("Cannot join threads");
+			return ;
+		}
 		i++;
 	}
 }

@@ -6,20 +6,24 @@
 /*   By: cbijman <cbijman@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/10/30 12:40:30 by cbijman       #+#    #+#                 */
-/*   Updated: 2023/11/09 13:11:40 by cbijman       ########   odam.nl         */
+/*   Updated: 2023/11/10 14:14:26 by cbijman       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-void	ft_usleep(unsigned int time)
+void	ft_usleep(t_philosopher *philo, unsigned int time)
 {
 	const time_t	start = ft_gettime();
 	time_t			ms;
 
 	ms = 0;
 	while ((ft_gettime() - start) < time)
+	{
+		if (did_anyone_die(philo))
+			return ;
 		usleep(150);
+	}
 }
 
 bool	ft_isnumber(char const *str)
@@ -28,6 +32,8 @@ bool	ft_isnumber(char const *str)
 
 	i = 0;
 	if (!str)
+		return (0);
+	if (str[i] == '-')
 		return (0);
 	if (str[i] == '+')
 		i++;
@@ -39,6 +45,8 @@ bool	ft_isnumber(char const *str)
 			return (0);
 		i++;
 	}
+	if (i > 12)
+		return (0);
 	return (1);
 }
 
@@ -84,7 +92,7 @@ long	ft_atol(const char *str)
 	return (n * multi);
 }
 
-int32_t	ft_atoi(const char *str)
+int	ft_atoi(const char *str)
 {
 	int		i;
 	int		multi;

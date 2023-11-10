@@ -6,7 +6,7 @@
 /*   By: cbijman <cbijman@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/11/02 11:32:41 by cbijman       #+#    #+#                 */
-/*   Updated: 2023/11/09 15:19:08 by cbijman       ########   odam.nl         */
+/*   Updated: 2023/11/10 14:16:29 by cbijman       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ static t_philosopher	*new_philosopher(t_program *program, int id)
 
 	if (time == -1)
 		time = ft_gettime();
-	philo = malloc(sizeof(t_philosopher));
+	philo = ft_calloc(1, sizeof(t_philosopher));
 	if (!philo)
 		return (NULL);
 	philo->program = program;
@@ -30,64 +30,54 @@ static t_philosopher	*new_philosopher(t_program *program, int id)
 	philo->times_eat = 0;
 	philo->last_time_eat = time;
 	if (pthread_mutex_init(&philo->lock, NULL) != 0)
-		return (NULL);
+		return (free(philo), NULL);
 	return (philo);
 }
 
-int	my_pthread_create(
-	pthread_t *a, const pthread_attr_t *b, void *(*c)(void *), void *d)
+t_philosopher	**initialize_philosophers(t_philosopher ***philos,
+					t_program *program)
 {
-	static int	i = 0;
-
-	i++;
-	if (i > 2)
-		return (1);
-	return (pthread_create(a, b, c, d));
-}
-
-t_philosopher	**initialize_philosophers(t_program *program)
-{
-	t_philosopher	**philos;
-	int				i;
+	int	i;
 
 	i = 0;
-	philos = malloc(program->nb_of_philos * sizeof(t_philosopher));
-	if (!philos)
+	(*philos) = ft_calloc(program->nb_of_philos + 1, sizeof(t_philosopher));
+	if (!(*philos))
 		return (NULL);
-	memset(philos, 0, program->nb_of_philos * sizeof(t_philosopher));
 	while (i < program->nb_of_philos)
 	{
-		philos[i] = new_philosopher(program, i);
-		if (!philos[i])
-			return (cleanup_philos(philos), NULL);
+		(*philos)[i] = new_philosopher(program, i);
+		if (!(*philos)[i])
+		{
+			cleanup_philos(*philos);
+			return (NULL);
+		}
 		i++;
 	}
-	return (philos);
+	return (*philos);
 }
 
 bool	initialize_program(int ac, char **av, t_program *program)
 {
 	program->nb_of_philos = ft_atoi(av[1]);
-	if (program->nb_of_philos > MAX_THREADS)
-		return (false);
 	program->time_to_die = ft_atoi(av[2]);
 	program->time_to_eat = ft_atoi(av[3]);
 	program->time_to_sleep = ft_atoi(av[4]);
 	if (ac == 6)
 		program->times_eat = ft_atoi(av[5]);
+	if (program->times_eat > INT32_MAX || program->nb_of_philos > MAX_THREADS)
+		return (false);
 	program->is_dead = false;
 	program->time = ft_gettime();
-	program->forks = malloc(program->nb_of_philos * sizeof(pthread_mutex_t));
+	program->forks = ft_calloc(program->nb_of_philos, sizeof(pthread_mutex_t));
 	if (!program->forks)
 		return (false);
-	if (program->times_eat > INT32_MAX)
-		return (free(program->forks), false);
-	if (pthread_mutex_init(&program->lock, NULL) != 0)
-		return (free(program->forks), cleanup_program(program), false);
-	if (pthread_mutex_init(&program->dead_lock, NULL) != 0)
-		return (free(program->forks), cleanup_program(program), false);
-	if (pthread_mutex_init(&program->write_lock, NULL) != 0)
-		return (free(program->forks), cleanup_program(program), false);
+	if (!ft_safe_mutex_init(4,
+			&program->lock, &program->startup_lock,
+			&program->dead_lock, &program->write_lock))
+	{
+		free(program->forks);
+		return (false);
+	}
 	return (true);
 }
 
@@ -99,19 +89,20 @@ bool	initialize_threads(t_program *program,
 	if (!philos || !*philos)
 		return (false);
 	i = 0;
-	pthread_mutex_lock(&program->lock);
+	pthread_mutex_lock(&program->startup_lock);
 	while (philos[i])
 	{
-		if (my_pthread_create(&philos[i]->thread, NULL,
-				routine, philos[i]) != 0)
+		if (pthread_create(&philos[i]->thread, NULL, routine, philos[i]) != 0)
 		{
-			program->is_dead = true; //Set death to true.
-			pthread_mutex_unlock(&program->lock);
+			pthread_mutex_lock(&program->dead_lock);
+			program->is_dead = true;
+			pthread_mutex_unlock(&program->dead_lock);
+			pthread_mutex_unlock(&program->startup_lock);
 			return (false);
 		}
 		i++;
 	}
-	pthread_mutex_unlock(&program->lock);
+	pthread_mutex_unlock(&program->startup_lock);
 	return (true);
 }
 

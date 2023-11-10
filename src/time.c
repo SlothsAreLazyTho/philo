@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   ft_time.c                                          :+:    :+:            */
+/*   time_utils.c                                       :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: cbijman <cbijman@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/09/20 10:29:01 by cbijman       #+#    #+#                 */
-/*   Updated: 2023/10/25 15:40:45 by cbijman       ########   odam.nl         */
+/*   Updated: 2023/11/10 13:12:13 by cbijman       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/philo.h"
+#include "philo.h"
 
 time_t	ft_gettime(void)
 {

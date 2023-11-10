@@ -6,7 +6,7 @@
 /*   By: cbijman <marvin@codam.nl>                    +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/05/22 18:27:29 by cbijman       #+#    #+#                 */
-/*   Updated: 2023/11/09 15:18:27 by cbijman       ########   odam.nl         */
+/*   Updated: 2023/11/10 14:14:40 by cbijman       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,11 +28,11 @@
 # define IS_DEAD "died"
 # define TAKES_A_FORK "has taken a fork"
 
-# define ERR_NO_FORK "Error while creating forks"
-# define ERR_NO_PHILO "Error while creating philos"
-# define ERR_NOT_ENOUGH_MEMORY "Not enough memory for allocation"
-# define ERR_NOT_ENOUGH_ARGS "Not valid nor enough arguments provided"
-# define ERR_W_THREADS "Error while creating threads"
+# define ERR_NO_FORK "Error while creating forks\n"
+# define ERR_NO_PHILO "Error while creating philos\n"
+# define ERR_NOT_ENOUGH_MEMORY "Not enough memory for allocation\n"
+# define ERR_NOT_ENOUGH_ARGS "Not valid nor enough arguments provided\n"
+# define ERR_W_THREADS "Error while creating threads\n"
 
 # define MAX_THREADS 2047
 
@@ -56,6 +56,7 @@ typedef struct s_program
 	pthread_mutex_t	lock;
 	pthread_mutex_t	write_lock;
 	pthread_mutex_t	dead_lock;
+	pthread_mutex_t	startup_lock;
 	bool			is_dead;
 	time_t			time;
 	int32_t			nb_of_philos;
@@ -65,15 +66,18 @@ typedef struct s_program
 	int32_t			times_eat;
 }	t_program;
 
-// Program functions
-bool			is_valid_params(int ac, char **av);
-
 // Initialization
 bool			initialize_program(int ac, char **av, t_program *program);
 bool			initialize_forks(t_program *program);
-t_philosopher	**initialize_philosophers(t_program *program);
+t_philosopher	**initialize_philosophers(t_philosopher ***philos,
+					t_program *program);
 bool			initialize_threads(t_program *program,
 					t_philosopher **philos, void *(*routine)(void *));
+
+// Alloc functions
+void			*ft_calloc(size_t count, size_t size);
+void			ft_bzero(void *s, size_t n);
+bool			ft_safe_mutex_init(int size, ...);
 
 // Actions
 bool			p_eat(t_philosopher *philo);
@@ -83,6 +87,7 @@ bool			p_sleep(t_philosopher *philo);
 bool			ft_log(t_philosopher *philo, const char *text, bool cd);
 
 // Checkers
+bool			is_valid_params(int ac, char **av);
 bool			did_everyone_eat(t_philosopher **philo);
 bool			did_anyone_die(t_philosopher *philo);
 
@@ -94,9 +99,9 @@ void			cleanup_threads(t_philosopher **philos);
 void			cleanup(t_program *program, t_philosopher **philos);
 
 // Utils
-void			ft_usleep(unsigned int time);
+void			ft_usleep(t_philosopher *philo, unsigned int time);
 long			ft_atol(const char *str);
-int32_t			ft_atoi(const char *str);
+int				ft_atoi(const char *str);
 bool			ft_isnumber(char const *str);
 time_t			ft_gettime(void);
 time_t			ft_getmilliseconds(struct timeval time);

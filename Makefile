@@ -6,7 +6,7 @@
 #    By: cbijman <cbijman@student.codam.nl>           +#+                      #
 #                                                    +#+                       #
 #    Created: 2023/05/22 18:31:30 by cbijman       #+#    #+#                  #
-#    Updated: 2023/11/02 14:03:02 by cbijman       ########   odam.nl          #
+#    Updated: 2023/11/10 14:15:01 by cbijman       ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
@@ -27,7 +27,11 @@ FOLDER = src
 
 #Source files
 HEADERS = $(INCLUDE)/philo.h
-FILES = actions.c cleanup.c init.c logger.c main.c time_utils.c utils.c validate.c
+FILES = actions.c alloc.c \
+		cleanup.c init.c \
+		logger.c main.c \
+		time.c utils.c \
+		validate.c
 
 #Source
 SRC = ${addprefix $(FOLDER)/, $(FILES)}
